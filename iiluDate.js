@@ -203,7 +203,7 @@ let iiluDate = {
     },
 
     /**
-     * 传入农历年份和月份，输出对应月份的天数，第三个参数是月份是否为闰月，默认为 false
+     * 传入农历年份和月份，输出对应月份的天数，第三个参数是输入的月份是否为闰月，默认为 false
      * 假设传入的是 (1903, 4);       表示 输出 农历1906年 4月 的天数
      * 假设传入的是 (1906, 4, true); 表示 输出 农历1906年 润4月 的天数（第三个参数生效的前提是输入的是闰年，且月搞好是闰）
      * @param year
@@ -288,8 +288,59 @@ let iiluDate = {
         return yearDaysTotal
     },
 
-    // 输入农历日期，输出日期距离那年正月初一的天数
+    /**
+     * 输入农历日期，输出日期距离那年正月初一的天数
+     * 第4个参数是输入的月份是否为闰月，默认为 false
+     * @param year
+     * @param month
+     * @param day
+     * @param run
+     * @returns {number}
+     */
+    distanceLunarFirstDays(year, month, day, isRun = false) {
+        let yearData = this.lunarInfo[year - this.MIN_YEAR]; // 农历年份数据 例如：[4, 1, 25, 27304]
+        let monthNUmberDaysArr = this.getLunarMonthNumberDaysArr(+year); // 所有月份天数组成的数组
+        let run = +yearData[0]; // 闰月信息
+        let distanceDays = 0;
+
+        // 输入数量，返回 yearData 相应的前几项之和
+        function addNum(num) {
+            let nums = 0;
+            for (let i=0; i<num; i++) {
+                nums += monthNUmberDaysArr[i];
+            }
+            return nums;
+        }
+
+        if (run === 0) { // 非闰年
+            distanceDays = addNum(month - 1);
+        } else { // 闰年
+            if (run > month) {
+                distanceDays = addNum(month - 1);
+            }
+            else if (run < month) {
+                distanceDays = addNum(month);
+            }
+            else if (run === +month && !isRun) { // 输入的月份和闰月相同，但 isRun 为 false，month 为正常月份
+                distanceDays = addNum(month - 1);
+            }
+            else if (run === +month && isRun) { // 输入的月份和闰月相同，但 isRun 为 true，month 为闰月
+                distanceDays = addNum(month);
+            }
+        }
+        return distanceDays;
+    },
+
+    //
+    // var yearMonth = this.lunarMonths(year);
+    //     var res = 0;
+    //     for (var i = 1; i < month; i++) {
+    //         res += yearMonth[i-1];
+    //     }
+    //     res += day - 1;
+    //     return res;
 
     // 输入两个公历日期，输出两个日期间隔的天数
+
 
 };
