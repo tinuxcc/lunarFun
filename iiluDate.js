@@ -344,22 +344,43 @@ let iiluDate = {
         return distanceDays;
     },
 
-    // 输入规定格式的日期对象，返回年月日, 格式必须如例子  2019-06-06
     /**
-     * 输入规定格式的日期对象，返回其拆分后的数字数组, 格式必须如例子  'YYYY-MM-DD' 或者 'YYYY-MM-DD hh:mm:ss'
+     * 输入规定格式的日期字符串，返回其拆分后的数字数组, 格式必须如例子  'YYYY-MM-DD' 或者 'YYYY-MM-DD hh:mm:ss'
      * 如果格式错误，则返回空数组
      * @param str
      * @returns {Array|number[]}
      */
-    getStrYMD(str) {
+    getDateNumArr(str) {
         if (!str) {
-           return [];
+            console.warn('请输入正确的日期字符串');
+            return [];
         }
-        let strArr = str.split('-');
-        let numArr = strArr.map((item, index) => {
+
+        let ymdReg = /^\d{4}-\d{2}-\d{2}$/;
+        let hmsReg = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+
+        if (!hmsReg.test(str) || !ymdReg.test(str)) {
+            console.warn('请输入正确的日期字符串');
+            return [];
+        }
+
+
+        let ymdNumArr = []; // 年月日数组
+        let hmsNumArr = []; // 时分秒数组
+
+        let ymdStrArr = str.split(' ')[0].split('-');
+        ymdNumArr = ymdStrArr.map((item, index) => {
             return item - 0;
         });
-        return numArr;
+
+        if (str.split(' ')[1]) { // 如果存在时分秒
+            let hmsStrArr = str.split(' ')[1].split(':');
+            hmsNumArr = hmsStrArr.map((item, index) => {
+                return item - 0;
+            })
+        }
+
+        return [...ymdNumArr, ...hmsNumArr];
     },
 
     /**
