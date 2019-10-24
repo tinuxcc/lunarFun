@@ -331,16 +331,48 @@ let iiluDate = {
         return distanceDays;
     },
 
-    //
-    // var yearMonth = this.lunarMonths(year);
-    //     var res = 0;
-    //     for (var i = 1; i < month; i++) {
-    //         res += yearMonth[i-1];
-    //     }
-    //     res += day - 1;
-    //     return res;
+    /**
+     * 输入两个公历日期，输出两个日期间隔的天数
+     * @param date1
+     * @param date2
+     * @returns {number}
+     */
+    distanceDate(date1, date2) {
+        // 这里注意如果是手动 new Date(y, m, d); 来声明日期对象，月份要 -1，因为js日期对象月份从0开始 0-11
+        let distance = date1 - date2; // 以毫秒计的运行时长
+        let distanceDays = Math.floor(Math.abs(distance) / 1000 / 60 / 60 / 24); // 相差的毫秒数转为天数
+        return distanceDays;
+    },
 
-    // 输入两个公历日期，输出两个日期间隔的天数
+    // 输入规定格式的日期对象，返回年月日, 格式必须如例子  2019-06-06
+    /**
+     * 输入规定格式的日期对象，返回其拆分后的数字数组, 格式必须如例子  'YYYY-MM-DD' 或者 'YYYY-MM-DD hh:mm:ss'
+     * 如果格式错误，则返回空数组
+     * @param str
+     * @returns {Array|number[]}
+     */
+    getStrYMD(str) {
+        if (!str) {
+           return [];
+        }
+        let strArr = str.split('-');
+        let numArr = strArr.map((item, index) => {
+            return item - 0;
+        });
+        return numArr;
+    },
+
+    /**
+     * 输入公历年月日，返回其日期对象
+     * 因为月份在日期对象里面需要 -1(js日期对象月份从0开始 0-11)，时常忘记，所以这里写一个方法
+     * @param year
+     * @param month
+     * @param day
+     * @returns {Date}
+     */
+    getDateYMD(year, month, day) {
+        return new Date(+year, month - 1, +day);
+    },
 
 
 };
