@@ -214,7 +214,7 @@ let iiluDate = {
     getLunarMonthNumberDays(year, month, isRun = false) {
 
         let yearData = this.lunarInfo[year - this.MIN_YEAR]; // 农历年份数据 例如：[4, 1, 25, 27304]
-        let monthNumberDaysArr = this.getLunarMonthNumberDaysArr(+year); // 所有月份天数组成的数组
+        let monthNumberDaysArr = this.getLunarMonthNumberDaysArr(+year); // 农历所有月份天数组成的数组
         let monthNumber = 0; // 需要返回的天数
         let run = yearData[0]; // 是否是闰年，0 || 闰几月
 
@@ -239,7 +239,7 @@ let iiluDate = {
     },
 
     /**
-     * 传入农历年份，输出年的所有月份天数数组，闰年13个月，非闰年12个月，即数组长度为 13 或者 12
+     * 传入农历年份，输出农历年的所有月份天数数组，闰年13个月，非闰年12个月，即数组长度为 13 或者 12
      * 如果传入的参数不规范，则返回空数组
      * @param year
      * @returns {number[]}
@@ -276,7 +276,7 @@ let iiluDate = {
             console.warn('输入的年份参数有误');
             return 0;
         }
-        let monthsArr = this.getLunarMonthNumberDaysArr(year); // 传入年份的所有月份天数数组
+        let monthsArr = this.getLunarMonthNumberDaysArr(year); // 农历所有月份天数组成的数组
         if (monthsArr.length === 0) {
             console.warn('输入的年份参数有误');
             return 0;
@@ -299,7 +299,7 @@ let iiluDate = {
      */
     distanceLunarFirstDays(year, month, day, isRun = false) {
         let yearData = this.lunarInfo[year - this.MIN_YEAR]; // 农历年份数据 例如：[4, 1, 25, 27304]
-        let monthNUmberDaysArr = this.getLunarMonthNumberDaysArr(+year); // 所有月份天数组成的数组
+        let monthNUmberDaysArr = this.getLunarMonthNumberDaysArr(+year); // 农历所有月份天数组成的数组
         let run = +yearData[0]; // 闰月信息
         let distanceDays = 0;
 
@@ -332,7 +332,7 @@ let iiluDate = {
     },
 
     /**
-     * 输入两个公历日期，输出两个日期间隔的天数
+     * 输入两个公历日期对象，输出两个日期间隔的天数
      * @param date1
      * @param date2
      * @returns {number}
@@ -358,8 +358,12 @@ let iiluDate = {
 
         let ymdReg = /^\d{4}-\d{2}-\d{2}$/;
         let hmsReg = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+        let isByReg = false; // 是否通过了 正则验证
 
-        if (!hmsReg.test(str) || !ymdReg.test(str)) {
+        if (hmsReg.test(str) || ymdReg.test(str)) {
+            isByReg = true;
+        }
+        if (!isByReg) { // 如果没通过正则验证
             console.warn('请输入正确的日期字符串');
             return [];
         }
@@ -383,6 +387,7 @@ let iiluDate = {
         return [...ymdNumArr, ...hmsNumArr];
     },
 
+
     /**
      * 输入公历年月日，返回其日期对象
      * 因为月份在日期对象里面需要 -1(js日期对象月份从0开始 0-11)，时常忘记，所以这里写一个方法
@@ -393,6 +398,69 @@ let iiluDate = {
      */
     getDateYMD(year, month, day) {
         return new Date(+year, month - 1, +day);
+    },
+
+    /**
+     * 传入公历年月日返回农历年月日数组
+     * 数组的第四个项是在年份为闰年的时候决定输出的月份是否是闰月
+     */
+    gregorianToLunal(year, month, day) {
+        let yearData = this.lunarInfo[year - this.MIN_YEAR]; // 根据输入年份查询相应农历年份数据 例如：[4, 1, 25, 27304]
+        let firstDayMonth = +yearDate[1]; // 对应年份正月初一的月份信息
+        let firstDayDat = +yearData[2]; //  对应年份的正月初一的天数信息
+
+        /**
+         * 以输入年份的农历正月初一对应的月份和天数来作为基准
+         * 如果输入的月份和天数比基准 大，说明输出的农历年份是同年
+         * 如果输入的月份和天数比基准 小，说明输出的农历年份要比同年公历小一年
+         */
+        let compare = 0; // 0 表示输入的月份天数和基准一致 || 1 表示输入的月份天数比基准 大 || -1 表示输入的月份天数比基准 小
+        if (month > firstDayMonth) { // 输入的月份和比正月初一对应的月份大，
+            compare = 1;
+        } else if (month < firstDayMonth) { // 输入的月份比正月初一对应的月份小,
+            compare = -1;
+        } else if (+month === firstDayMonth) { // 输入的月份和正月初一的月份相同，这个时候比较天数
+            if (day > firstDayDat) {
+                compare = 1;
+            } else if (day < firstDayDat) {
+                compare = -1;
+            } else if (+day ===firstDayDat) { // 输入的公历年月日刚好和同年的农历对应的正月初一相同
+                compare = 0;
+            }
+        }
+
+        let lunalYear = 0; // 输出的阴历年份
+        let lunalMonth = 0; // 输出的阴历月份
+        let lunalDay = 0; // 输出的阴历天
+        let lunalIsRun = false; // 如果输出的阴历年份是闰年，此参数有效，判断输出的月份是否是闰月， 默认false
+
+        if (compare === 1) { // 输入的月份天数比基准 大， 使用同输入年份的农历年份数据
+            lunalYear = +year;
+            let differDays = this.distanceDate(this.getDateYMD(year, +yearData[1] +yearData[2]), this.getDateYMD(year, month, day)); // 输入的年月日和对应当年农历正月初一相差的天数
+            // let monthNUmberDaysArr = this.getLunarMonthNumberDaysArr(+year); // 农历所有月份天数组成的数组
+            // let run = +yearData[0]; // 闰月信息
+        }
+        else if (compare === -1) { // 输入的月份天数比基准 小，使用同输入年份 上一年 的农历数据
+
+        }
+        else if (compare === 0) { // 输入的月份天数和基准一致
+            lunalYear = +year;
+            lunalMonth = 1;
+            lunalDay = 1;
+        }
+
+        return [+lunalYear, +lunalMonth, +lunalDay, lunalIsRun];
+    },
+
+    /**
+     * 传入农历返回公历年月日数组，第四个
+     * @param year
+     * @param month
+     * @param day
+     * @param isRun
+     */
+    lunalToGregorian(year, month, day, isRun = false) {
+
     },
 
 
