@@ -251,8 +251,10 @@ let iiluDate = {
         }
 
         let yearData = this.lunarInfo[year - this.MIN_YEAR]; // 农历年份数据 例如：[4, 1, 25, 27304]
+        console.log(yearData)
         let run = yearData[0]; // 是否是闰年，0 || 闰几月
         let binaryArr = (+yearData[3]).toString(2).split(''); // 二进制字符串分解的数组
+        console.log(binaryArr)
         if (run === 0) { // 非闰年
             binaryArr.length = 12;
         } else { // 闰年
@@ -406,7 +408,7 @@ let iiluDate = {
      */
     gregorianToLunal(year, month, day) {
         let yearData = this.lunarInfo[year - this.MIN_YEAR]; // 根据输入年份查询相应农历年份数据 例如：[4, 1, 25, 27304]
-        let firstDayMonth = +yearDate[1]; // 对应年份正月初一的月份信息
+        let firstDayMonth = +yearData[1]; // 对应年份正月初一的月份信息
         let firstDayDat = +yearData[2]; //  对应年份的正月初一的天数信息
 
         /**
@@ -430,15 +432,53 @@ let iiluDate = {
         }
 
         let lunalYear = 0; // 输出的阴历年份
-        let lunalMonth = 0; // 输出的阴历月份
+        let lunalMonth = 0; // 输出的阴历月份(闰月则+1，后面的月份一次+1)
         let lunalDay = 0; // 输出的阴历天
         let lunalIsRun = false; // 如果输出的阴历年份是闰年，此参数有效，判断输出的月份是否是闰月， 默认false
 
         if (compare === 1) { // 输入的月份天数比基准 大， 使用同输入年份的农历年份数据
             lunalYear = +year;
-            let differDays = this.distanceDate(this.getDateYMD(year, +yearData[1] +yearData[2]), this.getDateYMD(year, month, day)); // 输入的年月日和对应当年农历正月初一相差的天数
-            // let monthNUmberDaysArr = this.getLunarMonthNumberDaysArr(+year); // 农历所有月份天数组成的数组
-            // let run = +yearData[0]; // 闰月信息
+            let differDays = this.distanceDate(this.getDateYMD(year, +yearData[1], +yearData[2]), this.getDateYMD(year, month, day)); // 输入的公历年月日和对应当年农历正月初一相差的天数
+            console.log(differDays);
+            let monthNUmberDaysArr = this.getLunarMonthNumberDaysArr(+year); // 农历所有月份天数组成的数组
+            console.log(monthNUmberDaysArr)
+            let monthSum = []; // 农历月份依次相加的数组，例如第一个项是 1月， 第二个项是 1月+2月，第三个项是 1月+2月+3月
+            monthNUmberDaysArr.reduce((accumulator, currentValue) => {
+                monthSum.push(accumulator + currentValue);
+                return accumulator + currentValue
+            }, 0);
+            console.log(monthSum);
+            for (let i=0, len=monthSum.length; i<len; i++) {
+                if (monthSum[i] >= differDays) {
+                    lunalMonth = i+1; // 月份，monthSum 的第几项比 differDays 大，就表示是第几月，项的第几位是下标 + 1
+                    lunalDay = monthNUmberDaysArr[i] - (monthSum[i] - differDays) + 1; // 天数，天数 = 月份的天数 - (前几个月的总和 - 相差天数) + 1；
+                    break;
+                }
+            }
+
+            let run = +yearData[0]; // 闰月信息
+            if (run && lunalMonth > run) {
+                /**
+                 * 如果当前是闰年，且 lunalMonth 比 闰月 小，lunalMonth 不变
+                 * 如果当前是闰年，且 lunalMonth 和 闰月 相等，lunalMonth 不变
+                 * 如果当前是闰年，且 lunalMonth 比 闰月 大
+                 * 如果刚好比闰月 大 1个月， 则lunalMonth - 1 且 lunalIsRun 为 true
+                 * 如果比闰月大很多，则lunalMonth - 1
+                 */
+                if (lunalMonth > (run + 1)) {
+                    lunalMonth = lunalMonth - 1;
+                } else if (lunalMonth === (run + 1)) {
+                    lunalMonth = lunalMonth - 1;
+                    lunalIsRun = true;
+                }
+            }
+            console.log([+lunalYear, +lunalMonth, +lunalDay, lunalIsRun])
+
+
+
+
+
+
         }
         else if (compare === -1) { // 输入的月份天数比基准 小，使用同输入年份 上一年 的农历数据
 
