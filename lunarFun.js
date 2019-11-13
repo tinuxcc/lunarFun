@@ -50,8 +50,8 @@ class LunarFunClass {
     /**
      * 传入年份和其对应的十六进制字符串，返回JS对象表示的数据
      * 传入的十六进制字符串不包括 “0x” 前缀
-     * @param { number } year 
-     * @param { string } numStr 
+     * @param { number } year
+     * @param { string } numStr
      */
     toJSON(year, numStr) {
         if (!numStr) {
@@ -59,45 +59,48 @@ class LunarFunClass {
         }
         let hexadecimal = numStr.toString('16'); // 保证使用的数据是十六进制的字符串
         let binary = parseInt(hexadecimal, 16).toString(2);
+        if (binary.length !== 24) { // 不足24位则左边补0补足24位
+            binary = '0'.repeat(24 - binary.length) + binary;
+        }
         let lunarItem = {
             'year': +year,
-        }
+        };
         // binary 第 21-24 个字符判断是否是闰年，如果是则得到闰几月
+        // binary 第 1 个字符是当年份是闰年的时候判断闰月的天数，1是大月30天， 0是小月29天，如果不是闰年则为0
         let runInfo = binary.slice(-4);
         if (runInfo === '0000') {
           lunarItem.isRun = false;
           lunarItem.runMonth = 0;
+          lunarItem.runMonthDays = 0;
         } else {
           lunarItem.isRun = true;
           lunarItem.runMonth = parseInt(runInfo, 2);
+          lunarItem.runMonthDays = +binary.slice(0, 1) + 29;
         }
-    
+
         // binary 第 9-20 个字符是当年的正常月份天数，1是大月30天， 0是小月29天
         lunarItem.monthsDays = [];
         let monthInfo = binary.slice(8, 20);
         [...monthInfo].map(item => {
             lunarItem.monthsDays.push(+item + 29);
         })
-        
+
         // binary 第 7-8 个字符是 农历年份正月初一对应的公历月份
         lunarItem.firstMonth = parseInt(binary.slice(6, 8), 2);
-        
+
         // binary 2-6 个字符是 农历年份正月初一对应的公历日子
         lunarItem.firstDay = parseInt(binary.slice(1, 6), 2);
-        
-        // binary 第一个字符是当年份是闰年的时候判断闰月的天数，1是大月30天， 0是小月29天
-        lunarItem.runMonthDays = +binary.slice(0, 1) + 29;
 
         return lunarItem;
         /* 输出例子
             {
-                "year": 2000,
-                "isRun": false,
-                "runMonth": 0,
-                "monthsDays": [29, 30, 29, 29, 30, 29, 30, 30, 29, 29, 29, 29],
-                "firstMonth": 2,
-                "firstDay": 13,
-                "runMonthDays": 30
+                 "year": 2000,
+                 "isRun": false,
+                 "runMonth": 0,
+                 "runMonthDays": 0,
+                 "monthsDays": [30, 30, 29, 29, 30, 29, 29, 30, 29, 30, 30, 29],
+                 "firstMonth": 2,
+                 "firstDay": 5
             }
         */
     }
