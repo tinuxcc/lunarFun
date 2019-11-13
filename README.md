@@ -12,9 +12,13 @@
 ## 农历数据说明
 农历和公历不一样，农历年份信息和公历不一样，没有规律可遵循，都是由天文台观测计算。大部分公历换农历都是用查表法进行转换。
 
+### 一些常识
+- 有闰月的年份中，农历节日只按原月算，不按闰月算，只有除夕例外，有闰腊月则过闰腊鱼除夕。（除夕是一年的最后一天的夜晚）
+- 在一个公历里面不可能出现两个农历新年，农历春节(正月初一)在一月和二月之间，具体区间可自行查询。
+
 ### 数据来源
 - [香港天文台](https://gb.weather.gov.hk/gts/time/conversionc.htm) 获取农历 1901年 - 2099年 数据
-- [asia-home](https://www.asia-home.com/china/nongli/year/2101/lang/cn.php) 获取农历 2100年数据 (打开贼慢)
+- [asia-home](https://www.asia-home.com/china/nongli/year/2101/lang/cn.php) 获取农历 2100年数据 (这网站打开贼慢)
 
 ### 数据误差
 由于计算数十年后的月相及节气时间可能会有数分钟的误差，若新月(即农历初一)或节气时间很接近午夜零时，相关农历月份或节气的日期可能会有一日之差别。  
@@ -45,8 +49,9 @@ let lunarInfo = {
 }
 ```
 200 个数据扒下来文件非常大，达到 30kb 多，压缩也是应有之意。  
-网上大多是用二进制表示然后压缩成十六进制，这里我也沿用，但各个位置上表示的数据确有差别。具体过程如下：  
-用 24 位二进制数表示数据信息（二进制位数从右往左数）
+网上大多是用二进制表示然后压缩成十六进制，这里我也沿用，但各个位置上表示的数据确有差别。具体过程如下：    
+用 24 位二进制数表示数据信息（二进制位数从右往左数）    
+
 | 24          | 23-19           | 18-17           | 16-13   | 12-9   | 8-5     | 4-1    |
 | :---------: | :-------------: | :-------------: | :-----: | :----: | :-----: | :--:   |
 | 表示闰月大小  | 正月初一对应的日子 | 正月初一对应的月份 | 正常月份 | 正常月份 | 正常月份 | 表示闰月 |
@@ -83,15 +88,62 @@ let lunarInfo = {
 最后得到的二进制串是 111001010110010101010100    
 转为十六进制后是 0xe56554
 
-**附上根据十六进制数转为JSON格式数据的方法**
+**附上根据十六进制字符串转为JSON格式数据的方法**
 ```javascript
-// 用 1906 年数据 0xe56554 来做 demo
-function toJSON(num) {
-    if (!num) {
+// 用 1906 年数据 e56554 来做 demo
+function toJSON(year, numStr) {
+    if (!numStr) {
         return '';
     }
-    let hexadecimal = num;
+    let hexadecimal = numStr.toString('16'); // 保证使用的数据是十六进制的字符串
+    let binary = parseInt(hexadecimal, 16).toString(2);
+    let lunarItem = {
+        [year + '']: {
+            'year': +year,
+        }
+    }
+    // binary 第 21-24 个字符判断是否是闰年，如果是则得到闰几月
+    let runInfo = binary.slice(-4);
+    if (runInfo === '0000') {
+      lunarItem[year + ''].isRun = false;
+      lunarItem[year + ''].runMonth = 0;
+    } else {
+      lunarItem[year + ''].isRun = true;
+      lunarItem[year + ''].runMonth = parseInt(runInfo, 2);
+    }
+
+    // binary 第 9-20 个字符是当年的正常月份天数，1是大月30天， 0是小月29天
+    lunarItem[year + ''].monthsDays = [];
+    let monthInfo = binary.slice(8, 20);
+    [...monthInfo].map(item => {
+        lunarItem[year + ''].monthsDays.push(+item + 29);
+    })
+    
+    // binary 第 7-8 个字符是 农历年份正月初一对应的公历月份
+    lunarItem[year + ''].firstMonth = parseInt(binary.slice(6, 8), 2);
+    
+    // binary 2-6 个字符是 农历年份正月初一对应的公历日子
+    lunarItem[year + ''].firstDay = parseInt(binary.slice(1, 6), 2);
+    
+    // binary 第一个字符是当年份是闰年的时候判断闰月的天数，1是大月30天， 0是小月29天
+    lunarItem[year + ''].runMonthDays = +binary.slice(0, 1) + 29;
+    return lunarItem;
+
 }
+console.log(toJSON(1906, 'e56554'));
+/*
+{
+  "1906": {
+    "year": 1906,
+    "isRun": true,
+    "runMonth": 4,
+    "monthsDays": [29,30,30,29,29,30,29,30,29,30,29,30],
+    "firstMonth": 1,
+    "firstDay": 25,
+    "runMonthDays": 30
+  }
+}
+*/
 ```
 
 

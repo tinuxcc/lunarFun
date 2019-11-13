@@ -1,9 +1,4 @@
 /**
- * 农历年份对应的不应该是数字形式，而是以立春为界限的干支表示法（例如：辛丑年、壬寅年等）
- * 这里为了方便把农历年份的正月初一所在的公历年份作为农历年份的数字表示（例如：公历1902年2月8日 是 壬寅年正月初一，所以 壬寅年对应的数字是1902）
- * 由于计算数十年后的月相及节气时间可能会有数分钟的误差，若新月(即农历初一)或节气时间很接近午夜零时，「对照表」内相关农历月份或节气的日期可能会有一日之差别。这些情况会出现在公历2057年9月28日、公历2089年9月4日及公历2097年8月7日的新月、公历2021年的冬至、公历2051年的春分、公历2083年的立春和公历2084年的春分。
- */
-/**
   *"1901": { // JSON 的 key 必须是双引号括起来的字符串
   *    "year": 1901, // 弄历年份的数字表示
   *    "firstMonth": 2, // 农历年份正月初一对应的公历月份
@@ -19,7 +14,7 @@
   *  - [香港天文台](https://gb.weather.gov.hk/gts/time/conversionc.htm) 农历 1901年 - 2099年 数据
   *  - [asia-home](https://www.asia-home.com/china/nongli/year/2101/lang/cn.php) 农历 2100年数据
   */
- let lunarYearData = {
+ let lunarInfoFormat = {
     "1901":{"year":1901,"firstMonth":2,"firstDay":19,"isRun":false,"runMonth":0,"runMonthDays":0,"monthsDays":[29,30,29,29,30,29,30,29,30,30,30,29]},
     "1902":{"year":1902,"firstMonth":2,"firstDay":8,"isRun":false,"runMonth":0,"runMonthDays":0,"monthsDays":[30,29,30,29,29,30,29,30,29,30,30,30]},
     "1903":{"year":1903,"firstMonth":1,"firstDay":29,"isRun":true,"runMonth":5,"runMonthDays":29,"monthsDays":[29,30,29,30,29,30,29,29,30,30,29,30]},
@@ -220,7 +215,8 @@
     "2098":{"year":2098,"firstMonth":2,"firstDay":1,"isRun":false,"runMonth":0,"runMonthDays":0,"monthsDays":[30,30,29,30,29,29,29,30,29,30,29,30]},
     "2099":{"year":2099,"firstMonth":1,"firstDay":21,"isRun":true,"runMonth":2,"runMonthDays":29,"monthsDays":[30,30,30,30,29,29,30,29,29,30,29,30]},
     "2100":{"year":2100,"firstMonth":2,"firstDay":9,"isRun":false,"runMonth":0,"runMonthDays":0,"monthsDays":[30,30,29,30,29,30,29,30,29,29,30,29]}
-}
-
-
-
+  }
+  
+  
+  
+  
