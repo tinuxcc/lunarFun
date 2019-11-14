@@ -215,8 +215,58 @@
     "2098":{"year":2098,"firstMonth":2,"firstDay":1,"isRun":false,"runMonth":0,"runMonthDays":0,"monthsDays":[30,30,29,30,29,29,29,30,29,30,29,30]},
     "2099":{"year":2099,"firstMonth":1,"firstDay":21,"isRun":true,"runMonth":2,"runMonthDays":29,"monthsDays":[30,30,30,30,29,29,30,29,29,30,29,30]},
     "2100":{"year":2100,"firstMonth":2,"firstDay":9,"isRun":false,"runMonth":0,"runMonthDays":0,"monthsDays":[30,30,29,30,29,30,29,30,29,29,30,29]}
-  }
+}
+
+/**
+ * 以下是把 lunarInfoFormat 数据转为 16进制字符串方法
+ */
+
   
+ function toHexadecimalStr(data) {
+  let shiliuArr = [];
+  let yearArr = Object.keys(data);
+  yearArr.forEach((item, index) => {
+      let erArr = []; // 存放 26 位二进制数字的数组
+
+      // 1-4位
+      let oneToFour = [];
+      if (data[item].isRun) { // 如果是闰年
+          let isRun2 = data[item].runMonth.toString(2);
+          isRun2 = '0000' + isRun2;
+          oneToFour = [...isRun2].slice(-4);
+      } else { // 如果不是闰年
+          oneToFour = ['0', '0', '0', '0'];
+      }
+
+      // 16-5
+      let shiliuTowu = [];
+      data[item].monthsDays.forEach((item, index) => {
+          shiliuTowu.push((item - 29) + '');
+      })
+
+      // 18-17
+      let ershiToShiqi = [];
+      let firstMonth2 = data[item].firstMonth.toString(2);
+      firstMonth2 = '00' + firstMonth2;
+      ershiToShiqi = [...firstMonth2].slice(-2);
+
+      // 19-23
+      let shijiuToersan = [];
+      let firstDay2 = data[item].firstDay.toString(2);
+      firstDay2 = '00000' + firstDay2;
+      shijiuToersan = [...firstDay2].slice(-5);
+
+      // 24
+      let ershisi = ['0'];
+      if (data[item].isRun && (data[item].runMonthDays === 30)) {
+          ershisi = ['1'];
+      }
+
+      erArr = [...ershisi, ...shijiuToersan, ...ershiToShiqi, ...shiliuTowu, ...oneToFour];
+      shiliuArr.push((parseInt(erArr.join(''), 2)).toString(16))
+  })
+  // console.log(shiliuArr);
+ }
   
   
   
