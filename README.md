@@ -97,7 +97,7 @@ let lunarInfo = {
 * 传入的十六进制字符串不包括 “0x” 前缀
 */
 function toJSON(year, numStr) {
-    if (!numStr) {
+    if (!year || !numStr) {
         return '';
     }
     let hexadecimal = numStr.toString('16'); // 保证使用的数据是十六进制的字符串

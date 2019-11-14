@@ -438,28 +438,33 @@ class LunarFunClass {
     }
 
     /**
-     * 传入农历返回公历年月日数组，第四个参数在农历年份是闰年的时候决定输入的是正常月份还是闰月
+     * 传入农历年月日返回公历年月日数组，第四个参数在农历年份是闰年的时候决定输入的是正常月份还是闰月
      * @param year
      * @param month
      * @param day
      * @param isRun
      */
-    lunalToGregorian(year, month, day, isRun = false) {
-
+    lunalToGregorian(year = this._throwIfMissing(), month = this._throwIfMissing(), day = this._throwIfMissing(), isRun = false) {
+        
     }
 };
 LunarFunClass.prototype.LUNAR_INFO = LUNAR_INFO;
 let lunarFun = new LunarFunClass();
 
 
-console.log(lunarFun.gregorianToLunal(1906, 7, 23))
+console.log(lunarFun.distanceLunarFirstDays(1906,4,1, true))
 
 /**
  * 以下代码是测试代码，没反应说明代码没问题
  * 测试代码可删除
  */
 
-// gregorianToLunal() 方法
+// distanceLunarFirstDays() 方法测试
+console.assert(lunarFun.distanceLunarFirstDays(1997, 5, 13) === 130, 'distanceLunarFirstDays()方法出错');
+console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 30) === 118, 'distanceLunarFirstDays()方法出错');
+console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 1, true) === 119, 'distanceLunarFirstDays()方法出错');
+
+// gregorianToLunal() 方法测试
  console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 5, 22)) === '[1906,4,29,false]', 'gregorianToLunal()方法出错');
  console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 5, 23)) === '[1906,4,1,true]', 'gregorianToLunal()方法出错');
  console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 2, 4)) === '[1999,12,29,false]', 'gregorianToLunal()方法出错');
