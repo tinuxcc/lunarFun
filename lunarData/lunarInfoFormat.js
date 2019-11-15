@@ -14,7 +14,7 @@
   *  - [香港天文台](https://gb.weather.gov.hk/gts/time/conversionc.htm) 农历 1901年 - 2099年 数据
   *  - [asia-home](https://www.asia-home.com/china/nongli/year/2101/lang/cn.php) 农历 2100年数据
   */
- let lunarInfoFormat = {
+let lunarInfoFormat = {
     "1901":{"year":1901,"firstMonth":2,"firstDay":19,"isRun":false,"runMonth":0,"runMonthDays":0,"monthsDays":[29,30,29,29,30,29,30,29,30,30,30,29]},
     "1902":{"year":1902,"firstMonth":2,"firstDay":8,"isRun":false,"runMonth":0,"runMonthDays":0,"monthsDays":[30,29,30,29,29,30,29,30,29,30,30,30]},
     "1903":{"year":1903,"firstMonth":1,"firstDay":29,"isRun":true,"runMonth":5,"runMonthDays":29,"monthsDays":[29,30,29,30,29,30,29,29,30,30,29,30]},
@@ -221,7 +221,6 @@
  * 以下是把 lunarInfoFormat 数据转为 16进制字符串方法
  * 传入 lunarInfoFormat 数据，返回十六进制字符串组成的数组
  */
-
 function toHexadecimalStr(data) {
     let HexadecimalStrArr = [];
     let yearArr = Object.keys(data);

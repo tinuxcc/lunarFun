@@ -296,20 +296,13 @@ class LunarFunClass {
         if (!yearDataInfo.isRun) { // 如果不是闰年 返回1月到输入月份前一个月的天数总和加上 日子-1
             return yearDataInfo.monthsDays.slice(0, month-1).reduce((arr, cur) => {
                 return arr + cur;
-            }) + day - 1;
-        } else { // 如果是闰年，存在多种情况
+            }, 0) + day - 1;
+        } else { // 如果是闰年，存在多种情况，方便理解下面写出了4种情况
             // 如果输入的月份比闰月小，或者输入的月份值等于闰月但isRun为false，则和不是闰年一样输出
-            // month < yearDataInfo.runMonth 的话，isRun一定是false，不是则说明输入的值有误
-            if (month <= yearDataInfo.runMonth && !isRun) {
+            if (month < yearDataInfo.runMonth) {
                 return yearDataInfo.monthsDays.slice(0, month-1).reduce((arr, cur) => {
                     return arr + cur;
-                }) + day - 1;
-            }
-            // 输入的月份和闰月一样，且isRun为true，返回1月到输入月份的的天数和加上日子-1
-            if (month === yearDataInfo.runMonth && isRun) {
-                return yearDataInfo.monthsDays.slice(0, month).reduce((arr, cur) => {
-                    return arr + cur;
-                }) + day - 1;
+                }, 0) + day - 1;
             }
             // 输入的月份比闰月大，输出的月份总和要加上闰月
             if (month > yearDataInfo.runMonth) {
@@ -317,7 +310,18 @@ class LunarFunClass {
                     return arr + cur;
                 }, yearDataInfo.runMonthDays) + day - 1;
             }
-
+            // 输入的月份和闰月一样，且isRun为false，和不是闰年一样输出
+            if (month === yearDataInfo.runMonth && !isRun) {
+                return yearDataInfo.monthsDays.slice(0, month-1).reduce((arr, cur) => {
+                    return arr + cur;
+                }, 0) + day - 1;
+            }
+            // 输入的月份和闰月一样，且isRun为true，返回1月到输入月份的的天数和加上日子-1
+            if (month === yearDataInfo.runMonth && isRun) {
+                return yearDataInfo.monthsDays.slice(0, month).reduce((arr, cur) => {
+                    return arr + cur;
+                }, 0) + day - 1;
+            }
         }
     }
 
@@ -452,7 +456,7 @@ LunarFunClass.prototype.LUNAR_INFO = LUNAR_INFO;
 let lunarFun = new LunarFunClass();
 
 
-console.log(lunarFun.distanceLunarFirstDays(1906,4,1, true))
+console.log(lunarFun.distanceLunarFirstDays(1906,4,29))
 
 /**
  * 以下代码是测试代码，没反应说明代码没问题
@@ -460,16 +464,20 @@ console.log(lunarFun.distanceLunarFirstDays(1906,4,1, true))
  */
 
 // distanceLunarFirstDays() 方法测试
+console.assert(lunarFun.distanceLunarFirstDays(1906, 1, 1) === 0, 'distanceLunarFirstDays()方法出错');
+console.assert(lunarFun.distanceLunarFirstDays(1906, 1, 29) === 28, 'distanceLunarFirstDays()方法出错');
+console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 1) === 89, 'distanceLunarFirstDays()方法出错');
+console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 29) === 117, 'distanceLunarFirstDays()方法出错');
+console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 30) === 118, 'distanceLunarFirstDays()方法出错'); // 4月农历只有29天
+console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 1, true) === 118, 'distanceLunarFirstDays()方法出错');
 console.assert(lunarFun.distanceLunarFirstDays(1997, 5, 13) === 130, 'distanceLunarFirstDays()方法出错');
-console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 30) === 118, 'distanceLunarFirstDays()方法出错');
-console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 1, true) === 119, 'distanceLunarFirstDays()方法出错');
 
 // gregorianToLunal() 方法测试
- console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 5, 22)) === '[1906,4,29,false]', 'gregorianToLunal()方法出错');
- console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 5, 23)) === '[1906,4,1,true]', 'gregorianToLunal()方法出错');
- console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 2, 4)) === '[1999,12,29,false]', 'gregorianToLunal()方法出错');
- console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 12, 31)) === '[2000,12,6,false]', 'gregorianToLunal()方法出错');
- console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 4, 6)) === '[2000,3,2,false]', 'gregorianToLunal()方法出错');
+console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 5, 22)) === '[1906,4,29,false]', 'gregorianToLunal()方法出错');
+console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 5, 23)) === '[1906,4,1,true]', 'gregorianToLunal()方法出错');
+console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 2, 4)) === '[1999,12,29,false]', 'gregorianToLunal()方法出错');
+console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 12, 31)) === '[2000,12,6,false]', 'gregorianToLunal()方法出错');
+console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 4, 6)) === '[2000,3,2,false]', 'gregorianToLunal()方法出错');
 
 
 
