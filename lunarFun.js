@@ -151,11 +151,6 @@ class LunarFunClass {
      * @returns {string}
      */
     getHeavenlyStems(year = this._throwIfMissing()) {
-        /**
-         * 公元年数先减 3，除以 10 余数所对应的的天干是数组 HeavenlyStems 里的第几个项。也就是余数 -1 作为数组下标得出的值
-         * 以 2010(庚寅) 年为例，年份减 3 得基数 2007 ,除以 10 得余数 7, 第 7 个是 '庚'。 也就是 HeavenlyStems[7-1] 为 '庚'
-         */
-
         let yearNum = +year;
 
         if (Number.isNaN(yearNum)) {
@@ -177,11 +172,6 @@ class LunarFunClass {
      * @returns {string}
      */
     getEarthlyBranches(year = this._throwIfMissing()) {
-        /**
-         * 公元年数先减 3，除以 12 余数所对应的的地支是数组 EarthlyBranches 里的第几个项。也就是余数 -1 作为数组下标得出的值
-         * 以 2010(庚寅) 年为例，年份减 3 得基数 2007 ,除以 12 得余数 3, 第 3 个是 '寅'。 也就是 EarthlyBranches[3-1] 为 '庚'
-         */
-
         let yearNum = +year;
 
         if (Number.isNaN(yearNum)) {
@@ -203,11 +193,6 @@ class LunarFunClass {
      * @returns {string}
      */
     getZodiac(year = this._throwIfMissing()) {
-        /**
-         * 公元年数先减 3，除以 12 余数所对应的的生肖是数组 Zodiac 里的第几个项。也就是余数 -1 作为数组下标得出的值
-         * 以 2010(虎) 年为例，年份减 3 得基数 2007 ,除以 12 得余数 3, 第 3 个是 '虎'。 也就是 Zodiac[3-1] 为 '虎'
-         */
-
         let yearNum = +year;
 
         if (Number.isNaN(yearNum)) {
@@ -649,64 +634,3 @@ class LunarFunClass {
 };
 LunarFunClass.prototype.LUNAR_INFO = LUNAR_INFO;
 let lunarFun = new LunarFunClass();
-
-
-console.log(lunarFun.formatLunarDate(1906, 4, 22, true))
-
-/**
- * 以下代码是测试代码，没反应说明代码没问题
- * 不需要测试代码可删除
- */
-
-// distanceLunarFirstDays() 方法测试
-console.assert(lunarFun.distanceLunarFirstDays(1906, 1, 1) === 0, 'distanceLunarFirstDays()方法出错');
-console.assert(lunarFun.distanceLunarFirstDays(1906, 1, 29) === 28, 'distanceLunarFirstDays()方法出错');
-console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 1) === 89, 'distanceLunarFirstDays()方法出错');
-console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 29) === 117, 'distanceLunarFirstDays()方法出错');
-console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 30) === 118, 'distanceLunarFirstDays()方法出错'); // 1906年4月农历只有29天
-console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 1, true) === 118, 'distanceLunarFirstDays()方法出错');
-console.assert(lunarFun.distanceLunarFirstDays(1997, 5, 13) === 130, 'distanceLunarFirstDays()方法出错');
-
-// getDateYMD() 方法测试
-console.assert(lunarFun.getDateYMD(2019,3,4).toString() === 'Mon Mar 04 2019 00:00:00 GMT+0800 (中国标准时间)', 'getDateYMD()方法出错');
-console.assert(lunarFun.getDateYMD(2019,6,7).toString() === 'Fri Jun 07 2019 00:00:00 GMT+0800 (中国标准时间)', 'getDateYMD()方法出错');
-console.assert(lunarFun.getDateYMD(2019,1,1).toString() === 'Tue Jan 01 2019 00:00:00 GMT+0800 (中国标准时间)', 'getDateYMD()方法出错');
-console.assert(lunarFun.getDateYMD(2019,12,31).toString() === 'Tue Dec 31 2019 00:00:00 GMT+0800 (中国标准时间)', 'getDateYMD()方法出错');
-
-// gregorianToLunal() 方法测试
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 1, 24)) === '[1905,12,30,false]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 1, 25)) === '[1906,1,1,false]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 1, 26)) === '[1906,1,2,false]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 5, 22)) === '[1906,4,29,false]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 5, 23)) === '[1906,4,1,true]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 2, 4)) === '[1999,12,29,false]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 12, 31)) === '[2000,12,6,false]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 4, 6)) === '[2000,3,2,false]', 'gregorianToLunal()方法出错');
-
-// lunalToGregorian() 方法测试
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 4, 29)) === '[1906,5,22]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 4, 1, true)) === '[1906,5,23]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 4, 30, true)) === '[1906,6,21]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 8, 8)) === '[1906,9,25]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 11, 16)) === '[1906,12,31]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 11, 17)) === '[1907,1,1]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 11, 29)) === '[1907,1,13]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 12, 11)) === '[1907,1,24]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 12, 30)) === '[1907,2,12]', 'lunalToGregorian()方法出错');
-
-// formatDate() 方法测试
-console.assert(lunarFun.formatDate(lunarFun.getDateYMD(2019, 1, 1)) === '2019-01-01 00:00:00', 'formatDate()方法出错');
-console.assert(lunarFun.formatDate(lunarFun.getDateYMD(2018, 12, 31)) === '2018-12-31 00:00:00', 'formatDate()方法出错');
-console.assert(lunarFun.formatDate(new Date(2019,10,20,13,28,36)) === '2019-11-20 13:28:36', 'formatDate()方法出错');
-console.assert(lunarFun.formatDate(new Date(2019,3,4,5,6,7), 'YYYY-M-D h:mm:s') === '2019-4-4 5:06:7', 'formatDate()方法出错');
-console.assert(lunarFun.formatDate(new Date(2019,3,4,5,6,7), 'YYYY-h-s h:DD:DD') === '2019-5-7 5:04:04', 'formatDate()方法出错');
-
-// formatLunarDate() 方法测试
-console.assert(lunarFun.formatLunarDate(2019, 1, 1) === '二零一九年正月初一日', 'formatLunarDate()方法出错');
-console.assert(lunarFun.formatLunarDate(1906, 4, 12) === '一九零六年四月十二日', 'formatLunarDate()方法出错');
-console.assert(lunarFun.formatLunarDate(1906, 4, 22, true) === '一九零六年闰四月廿二日', 'formatLunarDate()方法出错');
-console.assert(lunarFun.formatLunarDate(1906, 5, 29) === '一九零六年五月廿九日', 'formatLunarDate()方法出错');
-console.assert(lunarFun.formatLunarDate(1906, 8, 30) === '一九零六年八月三十日', 'formatLunarDate()方法出错');
-
-
-

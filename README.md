@@ -154,3 +154,60 @@ console.log(toJSON(2000, '16c960'));
     }
 */
 ```
+
+**附上根据JSON格式数据转为十六进制字符串的方法**
+```javascript
+/**
+ * 以下是把 lunarInfoFormat 数据转为 16进制字符串方法
+ * 传入 lunarInfoFormat 数据，返回十六进制字符串组成的数组
+ */
+function toHexadecimalStr(data) {
+    let HexadecimalStrArr = [];
+    let yearArr = Object.keys(data);
+    yearArr.sort(function (a, b) {
+        return a-b;
+    })
+    yearArr.forEach(item => {
+        let binaryStrArr = [];
+
+        // 1-4
+        let oneToFour = [];
+        if (data[item].isRun) { // 如果是闰年
+            let isRun2 = data[item].runMonth.toString(2);
+            isRun2 = '0000' + isRun2;
+            oneToFour = [...isRun2].slice(-4);
+        } else { // 如果不是闰年
+            oneToFour = ['0', '0', '0', '0'];
+        }
+
+        // 16-5
+        let sixteenToFive = [];
+        data[item].monthsDays.forEach((item, index) => {
+            sixteenToFive.push((item - 29) + '');
+        })
+
+        // 18-17
+        let eighteenToSeventeen = [];
+        let firstMonth2 = data[item].firstMonth.toString(2);
+        firstMonth2 = '00' + firstMonth2;
+        eighteenToSeventeen = [...firstMonth2].slice(-2);
+
+        // 19-23
+        let nineteenToTwentyThree = [];
+        let firstDay2 = data[item].firstDay.toString(2);
+        firstDay2 = '00000' + firstDay2;
+        nineteenToTwentyThree = [...firstDay2].slice(-5);
+
+        // 24
+        let twentyFour = ['0'];
+        if (data[item].isRun && (data[item].runMonthDays === 30)) {
+            twentyFour = ['1'];
+        }
+
+        binaryStrArr = [...twentyFour, ...nineteenToTwentyThree, ...eighteenToSeventeen, ...sixteenToFive, ...oneToFour];
+        HexadecimalStrArr.push((parseInt(binaryStrArr.join(''), 2)).toString(16))
+    })
+    
+    return HexadecimalStrArr;
+}
+```
