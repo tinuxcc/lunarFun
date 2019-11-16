@@ -12,23 +12,23 @@
 ### 主要方法
 **具体方法参数可查看 `lunarFun.js` 文件内介绍**
 
-| 方法名 | 使用介绍 | 参数 | 返回值 | 版本 |
-| :-- | :-- | :-- | :-- | :-- |
-| gregorianToLunal() | 公历转农历 | lunarFun.gregorianToLunal(2000, 2, 4) | [1999, 12, 29, false] | 1.0.0 |
-| lunalToGregorian() | 农历转公历 | lunarFun.lunalToGregorian(1906, 4, 30, true) | [1906, 6, 21] | 1.0.0 |
-| formatDate() | 格式化输出时间对象 | lunarFun.formatDate(new Date(2019,3,4,5,6,7), 'YYYY-M-D h:mm:s') | "2019-4-4 5:06:7" | 1.0.0 |
-| formatLunarDate() | 传入农历年月日返回其汉字表示 | lunarFun.formatLunarDate(1906, 4, 22, true) | "一九零六年闰四月廿二日" | 1.0.0 |
-| toJSON() | 十六进制串转JSON | lunarFun.toJSON(2000, '16c960') | {"year": 2000,"isRun": false,"runMonth": 0,"runMonthDays": 0,"monthsDays": [30, 30, 29, 29, 30, 29, 29, 30, 29, 30, 30, 29],"firstMonth": 2,"firstDay": 5} | 1.0.0 |
-| isLeapYear() | 判断输入的公历年份是否是闰年 | lunarFun.isLeapYear(2000) | true | 1.0.0 |
-| getHeavenlyStems() | 传入公历年份，输出天干 | lunarFun.getHeavenlyStems(1999) | "己" | 1.0.0 |
-| getEarthlyBranches() | 传入公历年份，输出地支 | lunarFun.getEarthlyBranches(1999) | "卯" | 1.0.0 |
-| getZodiac() | 传入公历年份，输出生肖 | lunarFun.getZodiac(1999) | "兔" | 1.0.0 |
-| getMonthNumberDays() | 传入公历年月，输出月份的天数 | lunarFun.getMonthNumberDays(1999, 6) | 30 | 1.0.0 |
-| getLunarMonthNumberDays() | 传入农历年月，输出月份的天数 | lunarFun.getLunarMonthNumberDays(1906, 4, true) | 30 | 1.0.0 |
-| getLunarYearDaysTotal() | 传入农历年份，输出那年所有的天数 | lunarFun.getLunarYearDaysTotal(1906) | 384 | 1.0.0 |
-| distanceLunarFirstDays() | 计算输入农历日期距离那年正月初一的天数 | lunarFun.distanceLunarFirstDays(1906, 4, 1, true) | 118 | 1.0.0 |
-| distanceDate() | 输入两个公历日期对象，输出两个日期间隔的天数 | lunarFun.distanceDate(new Date(1999, 6, 6), new Date(1997, 5, 13)) | 754 | 1.0.0 |
-| getDateYMD() | 输入公历年月日，返回其日期对象 | lunarFun.getDateYMD(2019,3,4).toString() | "Mon Mar 04 2019 00:00:00 GMT+0800 (中国标准时间)" | 1.0.0 |
+| 方法名 | 参数 | 返回值 | 版本 |
+| :-- | :-- | :-- | :-- |
+| gregorianToLunal() | lunarFun.gregorianToLunal(2000, 2, 4) | [1999, 12, 29, false] | 1.0.0 |
+| lunalToGregorian() | lunarFun.lunalToGregorian(1906, 4, 30, true) | [1906, 6, 21] | 1.0.0 |
+| formatDate() | lunarFun.formatDate(new Date(2019,3,4,5,6,7), 'YYYY-M-D h:mm:s') | "2019-4-4 5:06:7" | 1.0.0 |
+| formatLunarDate() | lunarFun.formatLunarDate(1906, 4, 22, true) | "一九零六年闰四月廿二日" | 1.0.0 |
+| toJSON() | lunarFun.toJSON(2000, '16c960') | {"year": 2000,"isRun": false,"runMonth": 0,"runMonthDays": 0,"monthsDays": [30, 30, 29, 29, 30, 29, 29, 30, 29, 30, 30, 29],"firstMonth": 2,"firstDay": 5} | 1.0.0 |
+| isLeapYear() | lunarFun.isLeapYear(2000) | true | 1.0.0 |
+| getHeavenlyStems() | lunarFun.getHeavenlyStems(1999) | "己" | 1.0.0 |
+| getEarthlyBranches() | lunarFun.getEarthlyBranches(1999) | "卯" | 1.0.0 |
+| getZodiac() | lunarFun.getZodiac(1999) | "兔" | 1.0.0 |
+| getMonthNumberDays() | lunarFun.getMonthNumberDays(1999, 6) | 30 | 1.0.0 |
+| getLunarMonthNumberDays() | lunarFun.getLunarMonthNumberDays(1906, 4, true) | 30 | 1.0.0 |
+| getLunarYearDaysTotal() | lunarFun.getLunarYearDaysTotal(1906) | 384 | 1.0.0 |
+| distanceLunarFirstDays() | lunarFun.distanceLunarFirstDays(1906, 4, 1, true) | 118 | 1.0.0 |
+| distanceDate() | lunarFun.distanceDate(new Date(1999, 6, 6), new Date(1997, 5, 13)) | 754 | 1.0.0 |
+| getDateYMD() | lunarFun.getDateYMD(2019,3,4).toString() | "Mon Mar 04 2019 00:00:00 GMT+0800 (中国标准时间)" | 1.0.0 |
 
 ### 方法明细
 #### formatDate(dateObj, formatText) 方法明细
