@@ -3,10 +3,25 @@
 
 ## 如何使用
 ### 直接下载引入
-把 `lunarFun` 文件夹下的 `lunarFun.js` 下载到本地并引入。
-```javascript
-
+把项目文件夹下的 `lunarFun.js` 或压缩后的 `lunarFun.min.js` 下载到本地并引入。
+```html
+<script src="你存放的文件夹/lunarFun.min.js"></script>
+<script>
+    lunarFun.gregorianToLunal(1906, 1, 26); // [1906, 1, 2, false]
+    lunarFun.lunalToGregorian(1906, 4, 30, true); // [1906, 6, 21]
+</script>
 ```
+
+### 使用 npm 引入
+项目支持 npm 进入，打开终端运行下方的命令
+```bash
+npm i lunar-fun -save
+```
+然后在项目入口文件引入
+```javascript
+let lunarFun = require('lunar-fun');
+```
+
 
 ## 方法列表
 ### 主要方法
@@ -60,7 +75,7 @@
 ## 更新日志
 ### 20191116
 #### 发布
-* 发布 1.0.0 版本
+* 发布 v1.0.0 版本
 
 
 ## 农历数据说明
