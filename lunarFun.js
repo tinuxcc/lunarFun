@@ -34,8 +34,8 @@ const LUNAR_INFO = {
     HEAVENLY_STEMS: ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'],
     EARTHLY_BRANCHES: ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'],
     ZODIAC: ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'],
-    CHINESE_MONTH: ['正', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'],
-    CHINESE_DATE: ['日', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '初', '廿', '卅'], // 廿: nian; 卅: sa; 都读四声
+    CHINESE_MONTH: ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'],
+    CHINESE_DATE: ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '初', '廿', '卅', '年', '月', '日', '闰'], // 廿: nian; 卅: sa; 都读四声
     CHINESE_SOLAR_TERMS: ['立春', '雨水', '惊蛰', '春分', '清明', '谷雨', '立夏', '小满', '芒种', '夏至', '小暑', '大暑', '立秋', '处暑', '白露', '秋分', '寒露', '霜降', '立冬', '小雪', '大雪', '冬至', '小寒', '大寒']
 }
 
@@ -151,11 +151,6 @@ class LunarFunClass {
      * @returns {string}
      */
     getHeavenlyStems(year = this._throwIfMissing()) {
-        /**
-         * 公元年数先减 3，除以 10 余数所对应的的天干是数组 HeavenlyStems 里的第几个项。也就是余数 -1 作为数组下标得出的值
-         * 以 2010(庚寅) 年为例，年份减 3 得基数 2007 ,除以 10 得余数 7, 第 7 个是 '庚'。 也就是 HeavenlyStems[7-1] 为 '庚'
-         */
-
         let yearNum = +year;
 
         if (Number.isNaN(yearNum)) {
@@ -177,11 +172,6 @@ class LunarFunClass {
      * @returns {string}
      */
     getEarthlyBranches(year = this._throwIfMissing()) {
-        /**
-         * 公元年数先减 3，除以 12 余数所对应的的地支是数组 EarthlyBranches 里的第几个项。也就是余数 -1 作为数组下标得出的值
-         * 以 2010(庚寅) 年为例，年份减 3 得基数 2007 ,除以 12 得余数 3, 第 3 个是 '寅'。 也就是 EarthlyBranches[3-1] 为 '庚'
-         */
-
         let yearNum = +year;
 
         if (Number.isNaN(yearNum)) {
@@ -203,11 +193,6 @@ class LunarFunClass {
      * @returns {string}
      */
     getZodiac(year = this._throwIfMissing()) {
-        /**
-         * 公元年数先减 3，除以 12 余数所对应的的生肖是数组 Zodiac 里的第几个项。也就是余数 -1 作为数组下标得出的值
-         * 以 2010(虎) 年为例，年份减 3 得基数 2007 ,除以 12 得余数 3, 第 3 个是 '虎'。 也就是 Zodiac[3-1] 为 '虎'
-         */
-
         let yearNum = +year;
 
         if (Number.isNaN(yearNum)) {
@@ -485,47 +470,167 @@ class LunarFunClass {
             return [+year, monthsTotalArrIndex + 1, gregorianDays];
         }
     }
+
+    /**
+     * 格式化输出时间对象
+     * 根据时间对象，返回对应时间格式的时间字符串
+     * @param {object} dateObj 时间对象 如果不传则默认当前时间
+     * @param {string} formatText 时间格式 区分大小写 如果不传则默认格式为 YYYY-MM-DD hh:mm:ss
+     */
+    formatDate(dateObj, formatText = 'YYYY-MM-DD hh:mm:ss') {
+        /**
+         * formatText 的字符含义
+         * | 格式       | 含义    | 备注       | 举例           |
+         * | :--:      | :--:    | :--:      | :--:          |
+         * | YYYY      | 年      | -         | 1999          |
+         * | M         | 月      | 不补零     | 6             |
+         * | MM        | 月      | 补零       | 06            |
+         * | D         | 日      | 不补零     | 6             |
+         * | DD        | 日      | 补零       | 06            |
+         * | h         | 小时     | 不补零     | 7             |
+         * | hh        | 小时     | 补零      | 07            |
+         * | m         | 分钟     | 不补零     | 8             |
+         * | mm        | 分钟     | 补零      | 08            |
+         * | s         | 秒      | 不补零     | 9             |
+         * | ss        | 秒      | 补零       | 09            |
+         * | W         | 星期    | 不补零     | 1             |
+         * |WW         | 星期    | 补零       | 01            |
+         * |WT         | 星期    | 文字表述   | 星期一         |
+         * | timestamp | JS时间戳 | 13位毫秒级 | 0928624089000 |
+         */
+
+        /**
+         * @desc 十进制数字补零 注意无穷大和无穷小, 会返回一个数字字符串, 如果无法补零则会返回空字符串，默认十进制
+         * @todu 注意，如果参数值是Number且是0开头，有可能会被解析为八进制数字
+         * @returns {string} 返回十进制数字字符串
+         * @param {number or string} num
+         */
+        let addZero = function (num) {
+            if (typeof num === "undefined") {
+                console.warn("注意，addZero() 补零方法没有接收到值，将返回空字符串");
+                return '';
+            }
+
+            let number = num - 0;
+
+            if (Number.isNaN(number)) {
+                console.warn("注意，addZero() 补零方法接收的值无法转换为数字，将返回空字符串");
+                return '';
+            }
+            if (!isFinite(number)) {
+                console.warn("注意，addZero() 补零方法接收的值不是js能解析的有限数值，将返回空字符串");
+                return '';
+            }
+
+            return number < 10 ? '0' + number : '' + number;
+        };
+
+        /**
+         * 传入日期对象和格式化字符串，返回相应的根据 格式化字符串 替换后的 格式化后的时间字符串
+         * @todu 如果需要增加其他的格式，例如‘毫秒’，则需要修改 regObj 这个正则，并在 replace 第二个参数的函数里面进行相应的返回
+         * @param {object} dateObj 时间日期对象
+         * @param {string} formatText 格式化字符串模板
+         */
+        let formatReplace = function (dateObj, formatText = 'YYYY-MM-DD hh:mm:ss') {
+            if (!dateObj) { // 如果时间对象为空，则返回错误
+                console.error('formatReplace() 函数没有接收到 Date 时间日期对象。');
+                return false;
+            }
+            let regObj = /YYYY|M{1,2}|D{1,2}|h{1,2}|m{1,2}|s{1,2}|WT|W{1,2}|timestamp/g; // 注意顺序，比如 WT 要在 W 前面，否则会先匹配 W
+            let newDateText = formatText.replace(regObj, function (match) {
+                /**
+                 * 返回替换字符串，根据 **本地时间** 返回
+                 * match 是匹配到的字符串 如果 regObj 为 g 模式（全局替换），则每次匹配都会执行这个函数
+                 * switch 使用的是全等匹配 即 match === case的值
+                 */
+                let weekText = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+                switch (match) {
+                    case 'YYYY':
+                        return dateObj.getFullYear(); // 1000-9999
+                    case 'M':
+                        return dateObj.getMonth() + 1; // 月份是 0-11, 这里返回 1-12
+                    case 'MM':
+                        return addZero(dateObj.getMonth() + 1); // 月份是 0-11, 这里返回 01-12
+                    case 'D':
+                        return dateObj.getDate(); // 1-31
+                    case 'DD':
+                        return addZero(dateObj.getDate()); // 01-31
+                    case 'h':
+                        return dateObj.getHours(); // 0-23
+                    case 'hh':
+                        return addZero(dateObj.getHours()); // 00-23
+                    case 'm':
+                        return dateObj.getMinutes(); // 0-59
+                    case 'mm':
+                        return addZero(dateObj.getMinutes()); // 00-59
+                    case 's':
+                        return dateObj.getSeconds(); // 0-59
+                    case 'ss':
+                        return addZero(dateObj.getSeconds()); // 00-59
+                    case 'W':
+                        return dateObj.getDay(); // 日期是 0 代表星期日， 1 代表星期一，2 代表星期二， 依次类推 这里返回 0-6
+                    case 'WW':
+                        return addZero(dateObj.getDay()); // 日期是 0 代表星期日， 1 代表星期一，2 代表星期二， 依次类推 这里返回 00-06
+                    case 'WT':
+                        return weekText[dateObj.getDay()]; // // 日期是 0 代表星期日， 1 代表星期一，2 代表星期二， 依次类推 这里返回 星期一~星期日
+                    case 'timestamp':
+                        return dateObj.getTime(); // 从1970-1-1 00:00:00 UTC（协调世界时）到该日期经过的毫秒数，对于1970-1-1 00:00:00 UTC之前的时间返回负值。
+                    default:
+                        console.warn('没有查询到格式化字符串，请确认日期格式化字符串是否正确');
+                        return '';
+                }
+            });
+            return newDateText;
+        };
+
+        if (!dateObj) { // 如果时间对象为空，则默认为当前时间
+            let nowDate = new Date();
+            return formatReplace(nowDate, formatText);
+        } else {
+            return formatReplace(dateObj, formatText);
+        }
+    }
+
+    /**
+     * 传入农历年月日返回其汉字表示，第四个参数在农历年份是闰年的时候决定输入的是正常月份还是闰月
+     */
+    formatLunarDate(year = this._throwIfMissing(), month = this._throwIfMissing(), day = this._throwIfMissing(), isRun = false) {
+        // 年
+        let resultYear = '';
+        let yearNumArr = [...(+year + '')];
+        let yearStrArr = [];
+        yearNumArr.map(item => {
+            yearStrArr.push(this.LUNAR_INFO.CHINESE_DATE[+item]);
+        })
+        resultYear = yearStrArr.join('');
+
+        // 月
+        let resultMonth = this.LUNAR_INFO.CHINESE_MONTH[month - 1];
+        if (isRun) {
+            resultMonth = this.LUNAR_INFO.CHINESE_DATE[17] + resultMonth;
+        }
+
+        // 日
+        let resultDay = '';
+        let dayNumArr = [...(+day + '')];
+        if (day <= 10) {
+            resultDay = this.LUNAR_INFO.CHINESE_DATE[11] + this.LUNAR_INFO.CHINESE_DATE[+day];
+        } else if (day <= 20) {
+            if (day < 20) {
+                resultDay = this.LUNAR_INFO.CHINESE_DATE[10] + this.LUNAR_INFO.CHINESE_DATE[+dayNumArr[1]];
+            } else if (+day === 20) {
+                resultDay = this.LUNAR_INFO.CHINESE_DATE[2] + this.LUNAR_INFO.CHINESE_DATE[10];
+            }
+        } else if (day <= 30) { // 农历一个月最多大月30天
+            if (day < 30) {
+                resultDay = this.LUNAR_INFO.CHINESE_DATE[12] + this.LUNAR_INFO.CHINESE_DATE[+dayNumArr[1]];
+            } else if (+day === 30) {
+                resultDay = this.LUNAR_INFO.CHINESE_DATE[3] + this.LUNAR_INFO.CHINESE_DATE[10];
+            }
+        }
+
+        return resultYear + this.LUNAR_INFO.CHINESE_DATE[14] + resultMonth + this.LUNAR_INFO.CHINESE_DATE[15] + resultDay + this.LUNAR_INFO.CHINESE_DATE[16]
+    }
 };
 LunarFunClass.prototype.LUNAR_INFO = LUNAR_INFO;
 let lunarFun = new LunarFunClass();
-
-
-console.log(lunarFun.lunalToGregorian(1906, 11, 17))
-
-/**
- * 以下代码是测试代码，没反应说明代码没问题
- * 不需要测试代码可删除
- */
-
-// distanceLunarFirstDays() 方法测试
-console.assert(lunarFun.distanceLunarFirstDays(1906, 1, 1) === 0, 'distanceLunarFirstDays()方法出错');
-console.assert(lunarFun.distanceLunarFirstDays(1906, 1, 29) === 28, 'distanceLunarFirstDays()方法出错');
-console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 1) === 89, 'distanceLunarFirstDays()方法出错');
-console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 29) === 117, 'distanceLunarFirstDays()方法出错');
-console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 30) === 118, 'distanceLunarFirstDays()方法出错'); // 1906年4月农历只有29天
-console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 1, true) === 118, 'distanceLunarFirstDays()方法出错');
-console.assert(lunarFun.distanceLunarFirstDays(1997, 5, 13) === 130, 'distanceLunarFirstDays()方法出错');
-
-// gregorianToLunal() 方法测试
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 1, 24)) === '[1905,12,30,false]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 1, 25)) === '[1906,1,1,false]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 1, 26)) === '[1906,1,2,false]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 5, 22)) === '[1906,4,29,false]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 5, 23)) === '[1906,4,1,true]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 2, 4)) === '[1999,12,29,false]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 12, 31)) === '[2000,12,6,false]', 'gregorianToLunal()方法出错');
-console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 4, 6)) === '[2000,3,2,false]', 'gregorianToLunal()方法出错');
-
-// lunalToGregorian() 方法测试
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 4, 29)) === '[1906,5,22]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 4, 1, true)) === '[1906,5,23]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 4, 30, true)) === '[1906,6,21]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 8, 8)) === '[1906,9,25]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 11, 16)) === '[1906,12,31]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 11, 17)) === '[1907,1,1]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 11, 29)) === '[1907,1,13]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 12, 11)) === '[1907,1,24]', 'lunalToGregorian()方法出错');
-console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 12, 30)) === '[1907,2,12]', 'lunalToGregorian()方法出错');
-
-
-

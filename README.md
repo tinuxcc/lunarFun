@@ -8,6 +8,56 @@
 
 ```
 
+## 方法列表
+### 主要方法
+| 方法名 | 使用介绍 | 参数 | 返回值 | 版本 |
+| :-- | :-- | :-- | :-- | :-- |
+| gregorianToLunal() | 传入公历年月日返回农历年月日数组，数组的第四个项是在年份为闰年的时候决定输出的月份是否是闰月 | lunarFun.gregorianToLunal(2000, 2, 4) | [1999, 12, 29, false] | 1.0.0 |
+| lunalToGregorian() | 传入农历年月日返回公历年月日数组，第四个参数在农历年份是闰年的时候决定输入的是正常月份还是闰月，默认false | lunarFun.lunalToGregorian(1906, 4, 30, true) | [1906, 6, 21] | 1.0.0 |
+| formatDate() | 格式化输出时间对象，具体说明请查看方法明细 | lunarFun.formatDate(new Date(2019,3,4,5,6,7), 'YYYY-M-D h:mm:s') | "2019-4-4 5:06:7" | 1.0.0 |
+| formatLunarDate() | 传入农历年月日返回其汉字表示，第四个参数在农历年份是闰年的时候决定输入的是正常月份还是闰月 | lunarFun.formatLunarDate(1906, 4, 22, true) | "一九零六年闰四月廿二日" | 1.0.0 |
+| toJSON() | 传入年份和其对应的十六进制字符串，返回JS对象表示的数据 | lunarFun.toJSON(2000, '16c960') | {"year": 2000,"isRun": false,"runMonth": 0,"runMonthDays": 0,"monthsDays": [30, 30, 29, 29, 30, 29, 29, 30, 29, 30, 30, 29],"firstMonth": 2,"firstDay": 5} | 1.0.0 |
+| isLeapYear() | 判断输入的公历年份是否是闰年 | lunarFun.isLeapYear(2000) | true | 1.0.0 |
+| getHeavenlyStems() | 传入公历年份，输出天干 | lunarFun.getHeavenlyStems(1999) | "己" | 1.0.0 |
+| getEarthlyBranches() | 传入公历年份，输出地支 | lunarFun.getEarthlyBranches(1999) | "卯" | 1.0.0 |
+| getZodiac() | 传入公历年份，输出生肖 | lunarFun.getZodiac(1999) | "兔" | 1.0.0 |
+| getMonthNumberDays() | 传入公历年份和月份，输出对应月份的天数 | lunarFun.getMonthNumberDays(1999, 6) | 30 | 1.0.0 |
+| getLunarMonthNumberDays() | 传入农历年份和月份，输出对应月份的天数，第三个参数是输入的月份是否为闰月，默认为 false | lunarFun.getLunarMonthNumberDays(1906, 4, true) | 30 | 1.0.0 |
+| getLunarYearDaysTotal() | 传入农历年份，输出那年所有的天数 | lunarFun.getLunarYearDaysTotal(1906) | 384 | 1.0.0 |
+| distanceLunarFirstDays() | 输入农历日期，输出日期距离那年正月初一的天数,第4个参数是输入的月份是否为闰月，默认为 false | lunarFun.distanceLunarFirstDays(1906, 4, 1, true) | 118 | 1.0.0 |
+| distanceDate() | 输入两个公历日期对象，输出两个日期间隔的天数 | lunarFun.distanceDate(new Date(1999, 6, 6), new Date(1997, 5, 13)) | 754 | 1.0.0 |
+| getDateYMD() | 输入公历年月日，返回其日期对象 | lunarFun.getDateYMD(2019,3,4).toString() | "Mon Mar 04 2019 00:00:00 GMT+0800 (中国标准时间)" | 1.0.0 |
+
+### 方法明细
+#### formatDate(dateObj, formatText) 方法明细
+* dateObj 时间对象 如果不传则默认当前时间
+* formatText 时间格式 区分大小写 如果不传则默认格式为 YYYY-MM-DD hh:mm:ss
+**formatText 的字符含义**
+| 格式       | 含义    | 备注       | 举例           |
+| :--:      | :--:    | :--:      | :--:          |
+| YYYY      | 年      | -         | 1999          |
+| M         | 月      | 不补零     | 6             |
+| MM        | 月      | 补零       | 06            |
+| D         | 日      | 不补零     | 6             |
+| DD        | 日      | 补零       | 06            |
+| h         | 小时     | 不补零     | 7             |
+| hh        | 小时     | 补零      | 07            |
+| m         | 分钟     | 不补零     | 8             |
+| mm        | 分钟     | 补零      | 08            |
+| s         | 秒      | 不补零     | 9             |
+| ss        | 秒      | 补零       | 09            |
+| W         | 星期    | 不补零     | 1             |
+|WW         | 星期    | 补零       | 01            |
+|WT         | 星期    | 文字表述   | 星期一         |
+| timestamp | JS时间戳 | 13位毫秒级 | 0928624089000 |
+
+
+
+## 更新日志
+### 20191116
+#### 发布
+* 发布 1.0.0 版本
+
 
 ## 农历数据说明
 农历和公历不一样，农历年份信息和公历不一样，没有规律可遵循，都是由天文台观测计算。大部分公历换农历都是用查表法进行转换。
@@ -148,4 +198,61 @@ console.log(toJSON(2000, '16c960'));
          "firstDay": 5
     }
 */
+```
+
+**附上根据JSON格式数据转为十六进制字符串的方法**
+```javascript
+/**
+ * 以下是把 lunarInfoFormat 数据转为 16进制字符串方法
+ * 传入 lunarInfoFormat 数据，返回十六进制字符串组成的数组
+ */
+function toHexadecimalStr(data) {
+    let HexadecimalStrArr = [];
+    let yearArr = Object.keys(data);
+    yearArr.sort(function (a, b) {
+        return a-b;
+    })
+    yearArr.forEach(item => {
+        let binaryStrArr = [];
+
+        // 1-4
+        let oneToFour = [];
+        if (data[item].isRun) { // 如果是闰年
+            let isRun2 = data[item].runMonth.toString(2);
+            isRun2 = '0000' + isRun2;
+            oneToFour = [...isRun2].slice(-4);
+        } else { // 如果不是闰年
+            oneToFour = ['0', '0', '0', '0'];
+        }
+
+        // 16-5
+        let sixteenToFive = [];
+        data[item].monthsDays.forEach((item, index) => {
+            sixteenToFive.push((item - 29) + '');
+        })
+
+        // 18-17
+        let eighteenToSeventeen = [];
+        let firstMonth2 = data[item].firstMonth.toString(2);
+        firstMonth2 = '00' + firstMonth2;
+        eighteenToSeventeen = [...firstMonth2].slice(-2);
+
+        // 19-23
+        let nineteenToTwentyThree = [];
+        let firstDay2 = data[item].firstDay.toString(2);
+        firstDay2 = '00000' + firstDay2;
+        nineteenToTwentyThree = [...firstDay2].slice(-5);
+
+        // 24
+        let twentyFour = ['0'];
+        if (data[item].isRun && (data[item].runMonthDays === 30)) {
+            twentyFour = ['1'];
+        }
+
+        binaryStrArr = [...twentyFour, ...nineteenToTwentyThree, ...eighteenToSeventeen, ...sixteenToFive, ...oneToFour];
+        HexadecimalStrArr.push((parseInt(binaryStrArr.join(''), 2)).toString(16))
+    })
+    
+    return HexadecimalStrArr;
+}
 ```
