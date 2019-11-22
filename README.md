@@ -12,7 +12,7 @@
 </script>
 ```
 
-### 使用 npm 引入
+### 使用 npm 引入 (暂时只支持 node.js)
 项目支持 npm 进入，打开终端运行下方的命令
 ```bash
 npm i lunar-fun -save
