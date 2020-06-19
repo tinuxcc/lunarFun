@@ -125,7 +125,7 @@ class LunarFunClass {
          */
 
         /**
-         * 使用一元运算符 + 来转换数字对于 parseInt() 和 parseFloat() 来转换数字说有一个地方表现不一致
+         * 使用一元运算符 + 来转换数字对于 parseInt() 和 parseFloat() 来说有一个地方表现不一致
          * 对于 '123abc' 前者转为 NaN , 后者转为 123
          */
 
@@ -632,5 +632,6 @@ class LunarFunClass {
         return resultYear + this.LUNAR_INFO.CHINESE_DATE[14] + resultMonth + this.LUNAR_INFO.CHINESE_DATE[15] + resultDay + this.LUNAR_INFO.CHINESE_DATE[16]
     }
 };
+
 LunarFunClass.prototype.LUNAR_INFO = LUNAR_INFO;
 let lunarFun = new LunarFunClass();
