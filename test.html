@@ -25,7 +25,7 @@
     // toJSON() 方法测试
     console.assert(JSON.stringify(lunarFun.toJSON(2000, '16c960')) === JSON.stringify({"year": 2000,"isRun": false,"runMonth": 0,"runMonthDays": 0,"monthsDays": [ 30, 30, 29, 29, 30, 29, 29, 30, 29, 30, 30, 29],"firstMonth": 2,"firstDay": 5}), 'toJSON()方法出错');
     console.assert(JSON.stringify(lunarFun.toJSON(1906, 'e56554')) === JSON.stringify({"year": 1906,"isRun": true,"runMonth": 4,"runMonthDays": 30,"monthsDays": [ 29, 30, 30, 29, 29, 30, 29, 30, 29, 30, 29, 30],"firstMonth": 1,"firstDay": 25}), 'toJSON()方法出错');
-    console.log('toJSON()方法通过测试');
+    console.log('toJSON()方法测试完毕');
 
     // isLeapYear() 方法测试
     console.assert(lunarFun.isLeapYear(2000) === true, 'isLeapYear()方法出错');
@@ -33,26 +33,26 @@
     console.assert(lunarFun.isLeapYear(1997) === false, 'isLeapYear()方法出错');
     console.assert(lunarFun.isLeapYear(1999) === false, 'isLeapYear()方法出错');
     console.assert(lunarFun.isLeapYear(1996) === true, 'isLeapYear()方法出错');
-    console.log('isLeapYear()方法通过测试');
+    console.log('isLeapYear()方法测试完毕');
 
     // getHeavenlyStems() 方法测试
     console.assert(lunarFun.getHeavenlyStems(1996) === '丙', 'getHeavenlyStems()方法出错');
     console.assert(lunarFun.getHeavenlyStems(1999) === '己', 'getHeavenlyStems()方法出错');
     console.assert(lunarFun.getHeavenlyStems(1997) === '丁', 'getHeavenlyStems()方法出错');
     console.assert(lunarFun.getHeavenlyStems(1998) === '戊', 'getHeavenlyStems()方法出错');
-    console.log('getHeavenlyStems()方法通过测试');
+    console.log('getHeavenlyStems()方法测试完毕');
 
     // getEarthlyBranches() 方法测试
     console.assert(lunarFun.getEarthlyBranches(1999) === '卯', 'getEarthlyBranches()方法出错');
     console.assert(lunarFun.getEarthlyBranches(1997) === '丑', 'getEarthlyBranches()方法出错');
     console.assert(lunarFun.getEarthlyBranches(1996) === '子', 'getEarthlyBranches()方法出错');
-    console.log('getEarthlyBranches()方法通过测试');
+    console.log('getEarthlyBranches()方法测试完毕');
 
     // getZodiac() 方法测试
     console.assert(lunarFun.getZodiac(1999) === '兔', 'getZodiac()方法出错');
     console.assert(lunarFun.getZodiac(1997) === '牛', 'getZodiac()方法出错');
     console.assert(lunarFun.getZodiac(1996) === '鼠', 'getZodiac()方法出错');
-    console.log('getZodiac()方法通过测试');
+    console.log('getZodiac()方法测试完毕');
 
     // getMonthNumberDays() 方法测试
     console.assert(lunarFun.getMonthNumberDays(1999, 6) === 30, 'getMonthNumberDays()方法出错');
@@ -60,7 +60,7 @@
     console.assert(lunarFun.getMonthNumberDays(1997, 5) === 31, 'getMonthNumberDays()方法出错');
     console.assert(lunarFun.getMonthNumberDays(1996, 12) === 31, 'getMonthNumberDays()方法出错');
     console.assert(lunarFun.getMonthNumberDays(1996, 2) === 29, 'getMonthNumberDays()方法出错');
-    console.log('getMonthNumberDays()方法通过测试');
+    console.log('getMonthNumberDays()方法测试完毕');
 
     // getLunarMonthNumberDays() 方法测试
     console.assert(lunarFun.getLunarMonthNumberDays(1999, 6) === 29, 'getLunarMonthNumberDays()方法出错');
@@ -69,14 +69,14 @@
     console.assert(lunarFun.getLunarMonthNumberDays(2000, 12) === 29, 'getLunarMonthNumberDays()方法出错');
     console.assert(lunarFun.getLunarMonthNumberDays(1906, 4) === 29, 'getLunarMonthNumberDays()方法出错');
     console.assert(lunarFun.getLunarMonthNumberDays(1906, 4, true) === 30, 'getLunarMonthNumberDays()方法出错');
-    console.log('getLunarMonthNumberDays()方法通过测试');
+    console.log('getLunarMonthNumberDays()方法测试完毕');
 
     // getLunarYearDaysTotal() 方法测试
     console.assert(lunarFun.getLunarYearDaysTotal(1999) === 354, 'getLunarYearDaysTotal()方法出错');
     console.assert(lunarFun.getLunarYearDaysTotal(1997) === 355, 'getLunarYearDaysTotal()方法出错');
     console.assert(lunarFun.getLunarYearDaysTotal(1996) === 354, 'getLunarYearDaysTotal()方法出错');
     console.assert(lunarFun.getLunarYearDaysTotal(1906) === 384, 'getLunarYearDaysTotal()方法出错');
-    console.log('getLunarYearDaysTotal()方法通过测试');
+    console.log('getLunarYearDaysTotal()方法测试完毕');
 
     // distanceLunarFirstDays() 方法测试
     console.assert(lunarFun.distanceLunarFirstDays(1906, 1, 1) === 0, 'distanceLunarFirstDays()方法出错');
@@ -86,21 +86,21 @@
     console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 30) === 118, 'distanceLunarFirstDays()方法出错'); // 1906年4月农历只有29天
     console.assert(lunarFun.distanceLunarFirstDays(1906, 4, 1, true) === 118, 'distanceLunarFirstDays()方法出错');
     console.assert(lunarFun.distanceLunarFirstDays(1997, 5, 13) === 130, 'distanceLunarFirstDays()方法出错');
-    console.log('distanceLunarFirstDays()方法通过测试');
+    console.log('distanceLunarFirstDays()方法测试完毕');
 
     // distanceDate() 方法测试
     console.assert(lunarFun.distanceDate(lunarFun.getDateYMD(1999, 6, 6), lunarFun.getDateYMD(1999, 6, 6)) === 0, 'distanceDate()方法出错');
     console.assert(lunarFun.distanceDate(lunarFun.getDateYMD(1999, 6, 6), lunarFun.getDateYMD(1999, 6, 7)) === 1, 'distanceDate()方法出错');
     console.assert(lunarFun.distanceDate(lunarFun.getDateYMD(1999, 6, 6), lunarFun.getDateYMD(1997, 5, 13)) === 754, 'distanceDate()方法出错');
     console.assert(lunarFun.distanceDate(lunarFun.getDateYMD(1999, 6, 6), lunarFun.getDateYMD(1997, 6, 17)) === 719, 'distanceDate()方法出错');
-    console.log('distanceDate()方法通过测试');
+    console.log('distanceDate()方法测试完毕');
 
     // getDateYMD() 方法测试
-    console.assert(lunarFun.getDateYMD(2019,3,4).toString() === 'Mon Mar 04 2019 00:00:00 GMT+0800 (中国标准时间)', 'getDateYMD()方法出错');
-    console.assert(lunarFun.getDateYMD(2019,6,7).toString() === 'Fri Jun 07 2019 00:00:00 GMT+0800 (中国标准时间)', 'getDateYMD()方法出错');
-    console.assert(lunarFun.getDateYMD(2019,1,1).toString() === 'Tue Jan 01 2019 00:00:00 GMT+0800 (中国标准时间)', 'getDateYMD()方法出错');
-    console.assert(lunarFun.getDateYMD(2019,12,31).toString() === 'Tue Dec 31 2019 00:00:00 GMT+0800 (中国标准时间)', 'getDateYMD()方法出错');
-    console.log('getDateYMD()方法通过测试');
+    console.assert(lunarFun.getDateYMD(2019,3,4).valueOf() === 1551628800000, 'getDateYMD()方法出错');
+    console.assert(lunarFun.getDateYMD(2019,6,7).valueOf() === 1559836800000, 'getDateYMD()方法出错');
+    console.assert(lunarFun.getDateYMD(2019,1,1).valueOf() === 1546272000000, 'getDateYMD()方法出错');
+    console.assert(lunarFun.getDateYMD(2019,12,31).valueOf() === 1577721600000, 'getDateYMD()方法出错');
+    console.log('getDateYMD()方法测试完毕');
 
     // gregorianToLunal() 方法测试
     console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 1, 24)) === '[1905,12,30,false]', 'gregorianToLunal()方法出错');
@@ -111,7 +111,7 @@
     console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 2, 4)) === '[1999,12,29,false]', 'gregorianToLunal()方法出错');
     console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 12, 31)) === '[2000,12,6,false]', 'gregorianToLunal()方法出错');
     console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 4, 6)) === '[2000,3,2,false]', 'gregorianToLunal()方法出错');
-    console.log('gregorianToLunal()方法通过测试');
+    console.log('gregorianToLunal()方法测试完毕');
 
     // lunalToGregorian() 方法测试
     console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 4, 29)) === '[1906,5,22]', 'lunalToGregorian()方法出错');
@@ -123,7 +123,7 @@
     console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 11, 29)) === '[1907,1,13]', 'lunalToGregorian()方法出错');
     console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 12, 11)) === '[1907,1,24]', 'lunalToGregorian()方法出错');
     console.assert(JSON.stringify(lunarFun.lunalToGregorian(1906, 12, 30)) === '[1907,2,12]', 'lunalToGregorian()方法出错');
-    console.log('lunalToGregorian()方法通过测试');
+    console.log('lunalToGregorian()方法测试完毕');
 
     // formatDate() 方法测试
     console.assert(lunarFun.formatDate(lunarFun.getDateYMD(2019, 1, 1)) === '2019-01-01 00:00:00', 'formatDate()方法出错');
@@ -131,7 +131,7 @@
     console.assert(lunarFun.formatDate(new Date(2019,10,20,13,28,36)) === '2019-11-20 13:28:36', 'formatDate()方法出错');
     console.assert(lunarFun.formatDate(new Date(2019,3,4,5,6,7), 'YYYY-M-D h:mm:s') === '2019-4-4 5:06:7', 'formatDate()方法出错');
     console.assert(lunarFun.formatDate(new Date(2019,3,4,5,6,7), 'YYYY-h-s h:DD:DD') === '2019-5-7 5:04:04', 'formatDate()方法出错');
-    console.log('formatDate()方法通过测试');
+    console.log('formatDate()方法测试完毕');
 
     // formatLunarDate() 方法测试
     console.assert(lunarFun.formatLunarDate(2019, 1, 1) === '二零一九年正月初一日', 'formatLunarDate()方法出错');
@@ -139,8 +139,8 @@
     console.assert(lunarFun.formatLunarDate(1906, 4, 22, true) === '一九零六年闰四月廿二日', 'formatLunarDate()方法出错');
     console.assert(lunarFun.formatLunarDate(1906, 5, 29) === '一九零六年五月廿九日', 'formatLunarDate()方法出错');
     console.assert(lunarFun.formatLunarDate(1906, 8, 30) === '一九零六年八月三十日', 'formatLunarDate()方法出错');
-    console.log('formatLunarDate()方法通过测试');
+    console.log('formatLunarDate()方法测试完毕');
 
     console.log('--------------------');
-    console.log('全部方法通过测试');
+    console.log('全部方法测试完毕');
 </script>

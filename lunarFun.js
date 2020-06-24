@@ -331,7 +331,7 @@ class LunarFunClass {
      * @returns {Date}
      */
     getDateYMD(year = this._throwIfMissing(), month = this._throwIfMissing(), day = this._throwIfMissing()) {
-        return new Date(+year, month - 1, +day);
+        return new Date(+year, month - 1, +day, 0, 0, 0);
     }
 
     /**
@@ -537,7 +537,7 @@ class LunarFunClass {
                 return false;
             }
             let regObj = /YYYY|M{1,2}|D{1,2}|h{1,2}|m{1,2}|s{1,2}|WT|W{1,2}|timestamp/g; // 注意顺序，比如 WT 要在 W 前面，否则会先匹配 W
-            let newDateText = formatText.replace(regObj, function (match) {
+            return formatText.replace(regObj, function (match) {
                 /**
                  * 返回替换字符串，根据 **本地时间** 返回
                  * match 是匹配到的字符串 如果 regObj 为 g 模式（全局替换），则每次匹配都会执行这个函数
@@ -580,7 +580,6 @@ class LunarFunClass {
                         return '';
                 }
             });
-            return newDateText;
         };
 
         if (!dateObj) { // 如果时间对象为空，则默认为当前时间
@@ -631,7 +630,7 @@ class LunarFunClass {
 
         return resultYear + this.LUNAR_INFO.CHINESE_DATE[14] + resultMonth + this.LUNAR_INFO.CHINESE_DATE[15] + resultDay + this.LUNAR_INFO.CHINESE_DATE[16]
     }
-};
+}
 
 LunarFunClass.prototype.LUNAR_INFO = LUNAR_INFO;
 let lunarFun = new LunarFunClass();
