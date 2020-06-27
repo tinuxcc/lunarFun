@@ -331,7 +331,24 @@ class LunarFunClass {
      * @returns {Date}
      */
     getDateYMD(year = this._throwIfMissing(), month = this._throwIfMissing(), day = this._throwIfMissing()) {
-        return new Date(+year, month - 1, +day, 0, 0, 0);
+
+
+        if (new Date().getTimezoneOffset() === -480) { // 表示当前是在中国时区
+            // console.log('当前是在中国时区');
+            // console.log('chinaTimestamp', new Date(+year, month - 1, +day, 0, 0, 0).getTime());
+            return new Date(+year, month - 1, +day, 0, 0, 0);
+
+        } else { // 表示当前不是在中国时区，那么根据输入的年月日，返回其中国时区相同的日期对象(即时间戳一样)
+            // console.log('当前不是在中国时区');
+            // console.log('当前时间的时区偏移量', new Date().getTimezoneOffset());
+            // 格林威治时间 = 本地时间 + 时差
+            let localDate = new Date(+year, month - 1, +day, 0, 0, 0); // 本地时间
+            let offsetGMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
+            let chinaTimestamp = localDate.getTime() - offsetGMT * 60 * 1000 - (8 * 60 * 60 * 1000); // 中国时间戳
+            // console.log('chinaTimestamp', chinaTimestamp);
+
+            return new Date(chinaTimestamp);
+        }
     }
 
     /**
@@ -345,8 +362,8 @@ class LunarFunClass {
      * @param { number } day 
      */
     gregorianToLunal(year = this._throwIfMissing(), month = this._throwIfMissing(), day = this._throwIfMissing()) {
-        let yearData = this.LUNAR_INFO.YEAR_INFO[year - this.LUNAR_INFO.MIN_YEAR];
-        let yearDataInfo = this.toJSON(+year, yearData);
+        let yearData = this.LUNAR_INFO.YEAR_INFO[year - this.LUNAR_INFO.MIN_YEAR]; // 获取到输入的年份16进制数据
+        let yearDataInfo = this.toJSON(+year, yearData); // 转化为 JSON数据
 
         /**
          * 以输入年份的农历正月初一对应的月份和天数来作为基准
