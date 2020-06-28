@@ -22,57 +22,6 @@ npm i lunar-fun -save
 let lunarFun = require('lunar-fun');
 ```
 
-
-## 方法列表
-这里方法列表写的不是很详细，各位可以下载代码自行查看，代码里面注释很完善。
-### 主要方法
-**具体方法参数说明可查看 `lunarFun.js` 文件内各方法介绍**
-
-| 方法名 | 参数 | 返回值 | 版本 |
-| :-- | :-- | :-- | :-- |
-| gregorianToLunal() | lunarFun.gregorianToLunal(2000, 2, 4) | [1999, 12, 29, false] | 1.0.0 |
-| lunalToGregorian() | lunarFun.lunalToGregorian(1906, 4, 30, true) | [1906, 6, 21] | 1.0.0 |
-| formatDate() | lunarFun.formatDate(new Date(2019,3,4,5,6,7), 'YYYY-M-D h:mm:s') | "2019-4-4 5:06:7" | 1.0.0 |
-| formatLunarDate() | lunarFun.formatLunarDate(1906, 4, 22, true) | "一九零六年闰四月廿二日" | 1.0.0 |
-| toJSON() | lunarFun.toJSON(2000, '16c960') | {"year": 2000,"isRun": false,"runMonth": 0,"runMonthDays": 0,"monthsDays": [30, 30, 29, 29, 30, 29, 29, 30, 29, 30, 30, 29],"firstMonth": 2,"firstDay": 5} | 1.0.0 |
-| isLeapYear() | lunarFun.isLeapYear(2000) | true | 1.0.0 |
-| getHeavenlyStems() | lunarFun.getHeavenlyStems(1999) | "己" | 1.0.0 |
-| getEarthlyBranches() | lunarFun.getEarthlyBranches(1999) | "卯" | 1.0.0 |
-| getZodiac() | lunarFun.getZodiac(1999) | "兔" | 1.0.0 |
-| getMonthNumberDays() | lunarFun.getMonthNumberDays(1999, 6) | 30 | 1.0.0 |
-| getLunarMonthNumberDays() | lunarFun.getLunarMonthNumberDays(1906, 4, true) | 30 | 1.0.0 |
-| getLunarYearDaysTotal() | lunarFun.getLunarYearDaysTotal(1906) | 384 | 1.0.0 |
-| distanceLunarFirstDays() | lunarFun.distanceLunarFirstDays(1906, 4, 1, true) | 118 | 1.0.0 |
-| distanceDate() | lunarFun.distanceDate(new Date(1999, 6, 6), new Date(1997, 5, 13)) | 754 | 1.0.0 |
-| getDateYMD() | lunarFun.getDateYMD(2019,3,4).toString() | "Mon Mar 04 2019 00:00:00 GMT+0800 (中国标准时间)" | 1.0.0 |
-
-### 方法明细
-#### formatDate(dateObj, formatText) 方法明细
-* dateObj 时间对象 如果不传则默认当前时间
-* formatText 时间格式 区分大小写 如果不传则默认格式为 YYYY-MM-DD hh:mm:ss
-
-**formatText 的字符含义**
-
-| 格式       | 含义    | 备注       | 举例           |
-| :--:      | :--:    | :--:      | :--:          |
-| YYYY      | 年      | -         | 1999          |
-| M         | 月      | 不补零     | 6             |
-| MM        | 月      | 补零       | 06            |
-| D         | 日      | 不补零     | 6             |
-| DD        | 日      | 补零       | 06            |
-| h         | 小时     | 不补零     | 7             |
-| hh        | 小时     | 补零      | 07            |
-| m         | 分钟     | 不补零     | 8             |
-| mm        | 分钟     | 补零      | 08            |
-| s         | 秒      | 不补零     | 9             |
-| ss        | 秒      | 补零       | 09            |
-| W         | 星期    | 不补零     | 1             |
-|WW         | 星期    | 补零       | 01            |
-|WT         | 星期    | 文字表述   | 星期一         |
-| timestamp | JS时间戳 | 13位毫秒级 | 0928624089000 |
-
-
-
 ## 更新日志
 ### 20200619
 #### 更新

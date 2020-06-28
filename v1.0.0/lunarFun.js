@@ -99,15 +99,16 @@ class LunarFunClass {
         lunarItem.firstDay = parseInt(binary.slice(1, 6), 2);
 
         return lunarItem;
+
         /* 输出例子
             {
-                 "year": 2000,
-                 "isRun": false,
-                 "runMonth": 0,
-                 "runMonthDays": 0,
-                 "monthsDays": [30, 30, 29, 29, 30, 29, 29, 30, 29, 30, 30, 29],
-                 "firstMonth": 2,
-                 "firstDay": 5
+                 "year": 2000, // 农历年份的数字表示
+                 "isRun": false, // 是否是闰年
+                 "runMonth": 0, // 是闰年的话闰几月，非闰年为 0
+                 "runMonthDays": 0, // 是闰年的话闰月的天数，非闰年为 0
+                 "monthsDays": [30, 30, 29, 29, 30, 29, 29, 30, 29, 30, 30, 29], // 正常十二个月的每月天数
+                 "firstMonth": 2, // 农历年份正月初一对应的公历月份
+                 "firstDay": 5 // 农历年份正月初一对应的公历日子
             }
         */
     }
@@ -223,7 +224,7 @@ class LunarFunClass {
     /**
      * 传入农历年份和月份，输出对应月份的天数，第三个参数是输入的月份是否为闰月，默认为 false
      * 假设传入的是 (1903, 4);       表示 输出 农历1906年 4月 的天数
-     * 假设传入的是 (1906, 4, true); 表示 输出 农历1906年 闰4月 的天数（第三个参数生效的前提是输入的是闰年，且月搞好是闰）
+     * 假设传入的是 (1906, 4, true); 表示 输出 农历1906年 闰4月 的天数（第三个参数生效的前提是输入的是闰年，且月刚好是闰）
      * @param year
      * @param month
      * @param run
