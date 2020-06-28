@@ -334,20 +334,15 @@ class LunarFunClass {
 
 
         if (new Date().getTimezoneOffset() === -480) { // 表示当前是在中国时区
-            // console.log('当前是在中国时区');
-            // console.log('chinaTimestamp', new Date(+year, month - 1, +day, 0, 0, 0).getTime());
             return new Date(+year, month - 1, +day, 0, 0, 0);
 
         } else { // 表示当前不是在中国时区，那么根据输入的年月日，返回其中国时区相同的日期对象(即时间戳一样)
-            // console.log('当前不是在中国时区');
-            // console.log('当前时间的时区偏移量', new Date().getTimezoneOffset());
-            // 格林威治时间 = 本地时间 + 时差
-            let localDate = new Date(+year, month - 1, +day, 0, 0, 0); // 本地时间
-            let offsetGMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
-            let chinaTimestamp = localDate.getTime() - offsetGMT * 60 * 1000 - (8 * 60 * 60 * 1000); // 中国时间戳
-            // console.log('chinaTimestamp', chinaTimestamp);
+            // let localDate = new Date(+year, month - 1, +day, 0, 0, 0); // 本地时间
+            // let offsetGMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
+            // let chinaTimestamp = localDate.getTime() - offsetGMT * 60 * 1000 - (8 * 60 * 60 * 1000); // 中国时间戳
 
-            return new Date(chinaTimestamp);
+            // return new Date(chinaTimestamp);
+            return new Date(+year, month - 1, +day, 0, 0, 0); // 经测试上诉不在中国时区的代码在不同时区，是否是夏令时等都会造成测试用例不通过，故此插件暂时只能在中国时区使用。
         }
     }
 
