@@ -323,6 +323,32 @@ class LunarFunClass {
         return Math.floor(Math.abs(distance) / 1000 / 60 / 60 / 24); // 相差的毫秒数转为天数
     }
 
+    /**
+     * 输入中国公历年月日，返回其日期对象
+     * 因为月份在日期对象里面需要 -1(js日期对象月份从0开始 0-11)，时常忘记，所以这里写一个方法
+     * @param year
+     * @param month
+     * @param day
+     * @returns {Date}
+     */
+    getDateYMD(year = this._throwIfMissing(), month = this._throwIfMissing(), day = this._throwIfMissing()) {
+
+
+        if (new Date().getTimezoneOffset() === -480) { // 表示当前是在中国时区
+            return new Date(+year, month - 1, +day, 0, 0, 0);
+
+        } else { // 表示当前不是在中国时区，那么根据输入的年月日，返回其中国时区相同的日期对象(即时间戳一样)
+            // let localDate = new Date(+year, month - 1, +day, 0, 0, 0); // 本地时间
+            // let offsetGMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
+            // let chinaTimestamp = localDate.getTime() - offsetGMT * 60 * 1000 - (8 * 60 * 60 * 1000); // 中国时间戳
+
+            // return new Date(chinaTimestamp);
+            return new Date(+year, month - 1, +day, 0, 0, 0); // 经测试上诉不在中国时区的代码在不同时区，是否是夏令时等都会造成测试用例不通过，故此插件暂时只能在中国时区使用。
+        }
+    }
+
+
+
     
 
 }
