@@ -362,6 +362,8 @@ class LunarFunClass {
      * @returns {number}
      */
     distanceDate(date1 = this._missingParameters(), date2 = this._missingParameters()) {
+        console.log('date1.getTime()', date1.getTime()); // 中-2048313600000 新 -2048309725000
+        console.log('date2.getTime()', date2.getTime()); // 中-2017728000000 新 -2017724400000
         let distance = date1 - date2; // 以毫秒计的运行时长
         return Math.floor(Math.abs(distance) / 1000 / 60 / 60 / 24); // 相差的毫秒数转为天数
     }
@@ -535,8 +537,11 @@ class LunarFunClass {
      * @param { number } day 
      */
     gregorianToLunal(year = this._missingParameters(), month = this._missingParameters(), day = this._missingParameters()) {
+        console.log('输入的年月日是', year, month, day);
         let yearData = this.LUNAR_INFO.YEAR_INFO[year - this.LUNAR_INFO.MIN_YEAR]; // 获取输入年份的16进制数据
+        console.log('yearData', yearData);
         let yearDataInfo = this.toJSON(+year, yearData); // 转化为 JSON数据
+        console.log('yearDataInfo', yearDataInfo);
 
         /**
          * 以输入年份的农历正月初一对应的月份和天数来作为基准
@@ -557,6 +562,7 @@ class LunarFunClass {
                 compare = 0;
             }
         }
+        console.log('compare', compare);
 
         let lunalYear = 0; // 输出的农历年份
         let lunalMonth = 0; // 输出的农历月份
@@ -569,6 +575,9 @@ class LunarFunClass {
             lunalYear = year - 1;
             yearData = this.LUNAR_INFO.YEAR_INFO[lunalYear - this.LUNAR_INFO.MIN_YEAR];
             yearDataInfo = this.toJSON(lunalYear, yearData);
+            console.log('新的', lunalYear);
+            console.log('新的yearData', yearData);
+            console.log('新的yearDataInfo', yearDataInfo);
         } else if (compare === 0) { // 输入的月份天数和基准一致
             lunalYear = +year;
             lunalMonth = 1;
@@ -576,6 +585,7 @@ class LunarFunClass {
         }
 
         let differDays = this.distanceDate(this.getDateYMD(lunalYear, yearDataInfo.firstMonth, yearDataInfo.firstDay), this.getDateYMD(year, month, day)); // 输入的公历年月日和其所在农历正月初一相差的天数
+        console.log('differDays', differDays); // 中国时间返回 354  新加坡时间返回 353
         let monthsTotalArr = [...yearDataInfo.monthsDays]; // 农历所有月份组成的数组，包括闰月，
         if (yearDataInfo.isRun) { // 如果有闰月，则在原来的月份后面插入闰月
             monthsTotalArr.splice(yearDataInfo.runMonth, 0, yearDataInfo.runMonthDays);
