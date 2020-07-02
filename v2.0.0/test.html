@@ -10,10 +10,10 @@
 </body>
 </html>
 <!-- 测试 未压缩 的代码 -->
-<script src="./lunarFun.js"></script>
+<!-- <script src="./lunarFun.js"></script> -->
 
 <!-- 测试 压缩后 的代码 -->
-<!-- <script src="./lunarFun.min.js"></script> -->
+<script src="./lunarFun.min.js"></script>
 <script>
     /**
      * 以下代码是测试代码，没反应说明代码没问题
@@ -113,16 +113,13 @@
     // formatDate() 方法测试
     console.assert(lunarFun.formatDate(lunarFun.getDateYMD(2019, 1, 1)) === '2019-01-01 00:00:00', 'formatDate()方法出错');
     console.assert(lunarFun.formatDate(lunarFun.getDateYMD(2018, 12, 31)) === '2018-12-31 00:00:00', 'formatDate()方法出错');
-    console.assert(lunarFun.formatDate(new Date(2019,10,20,13,28,36)) === '2019-11-20 13:28:36', 'formatDate()方法出错');
-    console.assert(lunarFun.formatDate(new Date(2019,3,4,5,6,7), 'YYYY-M-D h:mm:s') === '2019-4-4 5:06:7', 'formatDate()方法出错');
-    console.assert(lunarFun.formatDate(new Date(2019,3,4,5,6,7), 'YYYY-h-s h:DD:DD') === '2019-5-7 5:04:04', 'formatDate()方法出错');
-    console.assert(lunarFun.formatDate(new Date(2019,3,4,5,6,7), 'timestamp') === '1554325567000', 'formatDate()方法出错');
+    console.assert(lunarFun.formatDate(lunarFun.getDateYMD(2019,11,20,13,28,36)) === '2019-11-20 13:28:36', 'formatDate()方法出错');
+    console.assert(lunarFun.formatDate(lunarFun.getDateYMD(2019,4,4,5,6,7), 'YYYY-M-D h:mm:s') === '2019-4-4 5:06:7', 'formatDate()方法出错');
+    console.assert(lunarFun.formatDate(lunarFun.getDateYMD(2019,4,4,5,6,7), 'YYYY-h-s h:DD:DD') === '2019-5-7 5:04:04', 'formatDate()方法出错');
+    console.assert(lunarFun.formatDate(lunarFun.getDateYMD(2019,4,4,5,6,7), 'timestamp') === '1554325567000', 'formatDate()方法出错');
     console.log('formatDate()方法测试完毕');
 
     // gregorianToLunal() 方法测试
-    console.log(new Date().getTimezoneOffset());
-    // console.log(lunarFun.gregorianToLunal(1906, 1, 24));
-
     console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 1, 24)) === '[1905,12,30,false]', 'gregorianToLunal()方法出错');
     console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 1, 25)) === '[1906,1,1,false]', 'gregorianToLunal()方法出错');
     console.assert(JSON.stringify(lunarFun.gregorianToLunal(1906, 1, 26)) === '[1906,1,2,false]', 'gregorianToLunal()方法出错');
@@ -131,6 +128,7 @@
     console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 2, 4)) === '[1999,12,29,false]', 'gregorianToLunal()方法出错');
     console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 12, 31)) === '[2000,12,6,false]', 'gregorianToLunal()方法出错');
     console.assert(JSON.stringify(lunarFun.gregorianToLunal(2000, 4, 6)) === '[2000,3,2,false]', 'gregorianToLunal()方法出错');
+    console.assert(JSON.stringify(lunarFun.gregorianToLunal(2020, 4, 21)) === '[2020,3,29,false]', 'gregorianToLunal()方法出错');
     console.log('gregorianToLunal()方法测试完毕');
 
     // lunalToGregorian() 方法测试

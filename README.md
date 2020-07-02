@@ -3,7 +3,7 @@
 
 ## 如何使用
 ### 直接下载引入
-把项目文件夹下的 `lunarFun.js` 或压缩后的 `lunarFun.min.js` 下载到本地并引入。
+把项目文件夹下的 `./v2.0.0/lunarFun.js` 或压缩后的 `./v2.0.0/lunarFun.min.js` 下载到本地并引入。
 ```html
 <script src="你存放的文件夹/lunarFun.min.js"></script>
 <script>
@@ -12,20 +12,24 @@
 </script>
 ```
 
-### 使用 npm 引入 (暂时只支持 node.js)
+### 使用 npm 引入
 项目支持 npm 进入，打开终端运行下方的命令
 ```bash
 npm i lunar-fun -save
 ```
 然后在项目入口文件引入
 ```javascript
+// ES6
+import lunarFun from 'lunar-fun';
+// node
 let lunarFun = require('lunar-fun');
 ```
 
 ## 更新日志
+
 ### 20200619
 #### 更新
-* 更新时区对插件的影响
+* 更新时区对插件的影响，现支持非中国时区（注意：大部分时区都正常，小部分时区受夏令时还有真实偏移量等影响可能有误差
 * npm导入、浏览器导入等导入方法更新。
 
 ### 20191116
