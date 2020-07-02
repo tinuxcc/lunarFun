@@ -362,27 +362,28 @@ class LunarFunClass {
      * @returns {number}
      */
     distanceDate(date1 = this._missingParameters(), date2 = this._missingParameters()) {
-        console.log('date1.getTime()', date1.getTime()); // 中-2048313600000 新 -2048309725000
-        console.log('date2.getTime()', date2.getTime()); // 中-2017728000000 新 -2017724400000
         let distance = date1 - date2; // 以毫秒计的运行时长
-        return Math.floor(Math.abs(distance) / 1000 / 60 / 60 / 24); // 相差的毫秒数转为天数
+
+        // 这里会有精度问题，由原来的 Math.floor 转为 Math.round 方法，因为计算的天数有可能会出现 在中国时区为 354天，在新加坡时区为 353.99天，（中国时区和新加坡时区应该都是 +8 时区，按理说获取的时间戳是一样的，但它就是有误差我也是没办法
+        // return Math.floor(Math.abs(distance) / 1000 / 60 / 60 / 24); // 相差的毫秒数转为天数
+        return Math.round(Math.abs(distance) / 1000 / 60 / 60 / 24); // 相差的毫秒数转为天数
     }
 
     /**
-     * 输入中国公历年月日，返回其中国时间日期对象
-     * 注意：此日期对象最好不要使用日起对象的获取年月日方法等直接返回年月日，因为时区不一定是在中国
+     * 输入中国公历年月日，返回其中国时间日期对象，时分秒不传默认 0
+     * 注意：此日期对象最好不要使用日起对象的获取年月日方法等直接返回年月日，因为时区不一定是,在中国
      * 因为月份在日期对象里面需要 -1(js日期对象月份从0开始 0-11)，时常忘记，所以这里写一个方法
      * @param year
      * @param month
      * @param day
      * @returns {Date}
      */
-    getDateYMD(year = this._missingParameters(), month = this._missingParameters(), day = this._missingParameters()) {
+    getDateYMD(year = this._missingParameters(), month = this._missingParameters(), day = this._missingParameters(), h = 0, m = 0, s = 0) {
         if (new Date().getTimezoneOffset() === -480) { // 表示当前是在中国时区
-            return new Date(+year, month - 1, +day, 0, 0, 0);
+            return new Date(+year, month - 1, +day, h, m, s);
             
         } else { // 表示当前不是在中国时区，那么根据输入的年月日，返回其中国时区相同的日期对象(即时间戳一样)
-            let localDate = new Date(+year, month - 1, +day, 0, 0, 0); // 本地时间
+            let localDate = new Date(+year, month - 1, +day, h, m, s); // 本地时间
             let offsetGMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
             let chinaTimestamp = localDate.getTime() - (offsetGMT * 60 * 1000) - (8 * 60 * 60 * 1000); // 中国时间戳
 
@@ -537,11 +538,8 @@ class LunarFunClass {
      * @param { number } day 
      */
     gregorianToLunal(year = this._missingParameters(), month = this._missingParameters(), day = this._missingParameters()) {
-        console.log('输入的年月日是', year, month, day);
         let yearData = this.LUNAR_INFO.YEAR_INFO[year - this.LUNAR_INFO.MIN_YEAR]; // 获取输入年份的16进制数据
-        console.log('yearData', yearData);
         let yearDataInfo = this.toJSON(+year, yearData); // 转化为 JSON数据
-        console.log('yearDataInfo', yearDataInfo);
 
         /**
          * 以输入年份的农历正月初一对应的月份和天数来作为基准
@@ -562,7 +560,6 @@ class LunarFunClass {
                 compare = 0;
             }
         }
-        console.log('compare', compare);
 
         let lunalYear = 0; // 输出的农历年份
         let lunalMonth = 0; // 输出的农历月份
@@ -575,9 +572,6 @@ class LunarFunClass {
             lunalYear = year - 1;
             yearData = this.LUNAR_INFO.YEAR_INFO[lunalYear - this.LUNAR_INFO.MIN_YEAR];
             yearDataInfo = this.toJSON(lunalYear, yearData);
-            console.log('新的', lunalYear);
-            console.log('新的yearData', yearData);
-            console.log('新的yearDataInfo', yearDataInfo);
         } else if (compare === 0) { // 输入的月份天数和基准一致
             lunalYear = +year;
             lunalMonth = 1;
@@ -585,7 +579,6 @@ class LunarFunClass {
         }
 
         let differDays = this.distanceDate(this.getDateYMD(lunalYear, yearDataInfo.firstMonth, yearDataInfo.firstDay), this.getDateYMD(year, month, day)); // 输入的公历年月日和其所在农历正月初一相差的天数
-        console.log('differDays', differDays); // 中国时间返回 354  新加坡时间返回 353
         let monthsTotalArr = [...yearDataInfo.monthsDays]; // 农历所有月份组成的数组，包括闰月，
         if (yearDataInfo.isRun) { // 如果有闰月，则在原来的月份后面插入闰月
             monthsTotalArr.splice(yearDataInfo.runMonth, 0, yearDataInfo.runMonthDays);
@@ -678,29 +671,12 @@ class LunarFunClass {
 }
 
 LunarFunClass.prototype.LUNAR_INFO = LUNAR_INFO;
-let lunarFun = new LunarFunClass();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global.lunarFun = factory()); // lunarFun 是库的名字
+}(this, (function () { 
+    'use strict';
+    return new LunarFunClass();
+})));
