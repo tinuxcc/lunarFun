@@ -28,6 +28,9 @@ let lunarFun = require('lunar-fun');
 ## 方法文档
 ### 重要方法
 
+## 文件说明
+### "/lunarData" 文件夹
+
 
 
 
@@ -240,4 +243,5 @@ function toHexadecimalStr(data) {
     return HexadecimalStrArr;
 }
 ```
+
 
