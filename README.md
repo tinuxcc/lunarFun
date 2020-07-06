@@ -25,11 +25,17 @@ import lunarFun from 'lunar-fun';
 let lunarFun = require('lunar-fun');
 ```
 
+## 方法文档
+### 重要方法
+
+
+
+
 ## 更新日志
 
 ### 20200619
 #### 更新
-* 更新时区对插件的影响，现支持非中国时区（注意：大部分时区都正常，小部分时区受夏令时还有真实偏移量等影响可能有误差
+* 更新时区对插件的影响，现支持非中国时区（注意：大部分时区都正常，小部分时区受夏令时还有真实偏移量等影响可能存在误差。
 * npm导入、浏览器导入等导入方法更新。
 
 ### 20191116
@@ -140,13 +146,13 @@ function toJSON(year, numStr) {
     // binary 第 1 个字符是当年份是闰年的时候判断闰月的天数，1是大月30天， 0是小月29天，如果不是闰年则为0
     let runInfo = binary.slice(-4);
     if (runInfo === '0000') {
-      lunarItem.isRun = false;
-      lunarItem.runMonth = 0;
-      lunarItem.runMonthDays = 0;
+        lunarItem.isRun = false;
+	    lunarItem.runMonth = 0;
+	    lunarItem.runMonthDays = 0;
     } else {
-      lunarItem.isRun = true;
-      lunarItem.runMonth = parseInt(runInfo, 2);
-      lunarItem.runMonthDays = +binary.slice(0, 1) + 29;
+        lunarItem.isRun = true;
+        lunarItem.runMonth = parseInt(runInfo, 2);
+        lunarItem.runMonthDays = +binary.slice(0, 1) + 29;
     }
 
     // binary 第 9-20 个字符是当年的正常月份天数，1是大月30天， 0是小月29天
@@ -234,3 +240,4 @@ function toHexadecimalStr(data) {
     return HexadecimalStrArr;
 }
 ```
+
