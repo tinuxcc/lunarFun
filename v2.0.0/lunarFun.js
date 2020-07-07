@@ -3,7 +3,7 @@
 /**
  * @auth iilu.me
  * 用法说明可查看 [lunarFun](https://github.com/iilu/lunarFun)
- * 没有特殊说明，牵扯到的日期都为公历日期，农历日期会特别说明
+ * 没有特殊说明，牵扯到的数字日期都为中国公历日期，农历日期会特别说明
  */
 
 const LUNAR_INFO = {
@@ -48,19 +48,20 @@ class LunarFunClass {
     }
 
     /**
-     * 必传参数的默认参数，如果必传参数没有传则会抛出一个错误
+     * 作为下列方法必传参数的默认参数传入
+     * 用来在方法所需的参数没有传入的时候抛出错误
      */
-    _throwIfMissing() {
+    _missingParameters() {
         throw new Error('Missing parameter');
     }
 
     /**
-     * 传入年份和其对应的十六进制字符串，返回JS对象表示的数据
+     * 传入中国农历年份和其对应的十六进制字符串信息，返回JS对象表示的农历数据
      * 传入的十六进制字符串不包括 “0x” 前缀
      * @param { number } year
      * @param { string } numStr
      */
-    toJSON(year = this._throwIfMissing(), numStr = this._throwIfMissing()) {
+    toJSON(year = this._missingParameters(), numStr = this._missingParameters()) {
         if (!numStr) {
             return '';
         }
@@ -101,23 +102,23 @@ class LunarFunClass {
         return lunarItem;
         /* 输出例子
             {
-                 "year": 2000,
-                 "isRun": false,
-                 "runMonth": 0,
-                 "runMonthDays": 0,
-                 "monthsDays": [30, 30, 29, 29, 30, 29, 29, 30, 29, 30, 30, 29],
-                 "firstMonth": 2,
-                 "firstDay": 5
+                 "year": 2000, // 农历年份的数字表示
+                 "isRun": false, // 是否是闰年
+                 "runMonth": 0, // 是闰年的话闰几月，非闰年为 0
+                 "runMonthDays": 0, // 是闰年的话闰月的天数，非闰年为 0
+                 "monthsDays": [30, 30, 29, 29, 30, 29, 29, 30, 29, 30, 30, 29], // 正常十二个月的每月天数
+                 "firstMonth": 2, // 农历年份正月初一对应的公历月份
+                 "firstDay": 5 // 农历年份正月初一对应的公历日子
             }
         */
     }
 
     /**
-     * 判断输入的公历年份是否是闰年
+     * 判断输入的中国公历年份是否是闰年
      * @param year
      * @returns {boolean}
      */
-    isLeapYear(year = this._throwIfMissing()) {
+    isLeapYear(year = this._missingParameters()) {
         /**
          * 现在的公历是格里高利历，是公元1582年以后使用的，之前使用的是儒略历。
          * 格里高利历闰年的定义：世纪年中能被400整除的，和非世纪年中能被4整除的年份(即能被400整除的，或者不能被100整除而能被4整除的年份)
@@ -125,7 +126,7 @@ class LunarFunClass {
          */
 
         /**
-         * 使用一元运算符 + 来转换数字对于 parseInt() 和 parseFloat() 来转换数字说有一个地方表现不一致
+         * 使用一元运算符 + 来转换数字对于 parseInt() 和 parseFloat() 来说有一个地方表现不一致
          * 对于 '123abc' 前者转为 NaN , 后者转为 123
          */
 
@@ -146,11 +147,11 @@ class LunarFunClass {
     }
 
     /**
-     * 传入公历年份，输出天干，如果参数错误返回空字符串
+     * 传入中国公历年份，输出天干，如果参数错误返回空字符串
      * @param year
      * @returns {string}
      */
-    getHeavenlyStems(year = this._throwIfMissing()) {
+    getHeavenlyStems(year = this._missingParameters()) {
         let yearNum = +year;
 
         if (Number.isNaN(yearNum)) {
@@ -167,11 +168,11 @@ class LunarFunClass {
     }
 
     /**
-     * 传入公历年份，输出地支，如果参数错误返回空字符串
+     * 传入中国公历年份，输出地支，如果参数错误返回空字符串
      * @param year
      * @returns {string}
      */
-    getEarthlyBranches(year = this._throwIfMissing()) {
+    getEarthlyBranches(year = this._missingParameters()) {
         let yearNum = +year;
 
         if (Number.isNaN(yearNum)) {
@@ -188,11 +189,11 @@ class LunarFunClass {
     }
 
     /**
-     * 传入公历年份，输出生肖，如果参数错误返回空字符串
+     * 传入中国公历年份，输出生肖，如果参数错误返回空字符串
      * @param year
      * @returns {string}
      */
-    getZodiac(year = this._throwIfMissing()) {
+    getZodiac(year = this._missingParameters()) {
         let yearNum = +year;
 
         if (Number.isNaN(yearNum)) {
@@ -209,27 +210,27 @@ class LunarFunClass {
     }
 
     /**
-     * 传入公历年份和月份，输出对应月份的天数
+     * 传入中国公历年份和月份，输出对应月份的天数
      * @param year
      * @param month
      * @returns {number}
      */
-    getMonthNumberDays(year = this._throwIfMissing(), month = this._throwIfMissing()) {
+    getMonthNumberDays(year = this._missingParameters(), month = this._missingParameters()) {
         let FebDays = this.isLeapYear(year) ? 29 : 28;
         let monthNumberDaysArr = ['', 31, FebDays, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
         return monthNumberDaysArr[month];
     }
 
     /**
-     * 传入农历年份和月份，输出对应月份的天数，第三个参数是输入的月份是否为闰月，默认为 false
+     * 传入中国农历年份和月份，输出对应月份的天数，第三个参数是输入的月份是否为闰月，默认为 false
      * 假设传入的是 (1903, 4);       表示 输出 农历1906年 4月 的天数
-     * 假设传入的是 (1906, 4, true); 表示 输出 农历1906年 闰4月 的天数（第三个参数生效的前提是输入的是闰年，且月搞好是闰）
+     * 假设传入的是 (1906, 4, true); 表示 输出 农历1906年 闰4月 的天数（第三个参数生效的前提是输入的是闰年，且月刚好是闰）
      * @param year
      * @param month
      * @param run
      * @returns {number}
      */
-    getLunarMonthNumberDays(year = this._throwIfMissing(), month = this._throwIfMissing(), isRun = false) {
+    getLunarMonthNumberDays(year = this._missingParameters(), month = this._missingParameters(), isRun = false) {
         let yearData = this.LUNAR_INFO.YEAR_INFO[year - this.LUNAR_INFO.MIN_YEAR];
         let yearDataInfo = this.toJSON(+year, yearData);
 
@@ -242,11 +243,54 @@ class LunarFunClass {
     }
 
     /**
-     * 传入农历年份，输出那年所有的天数
+     * 传入中国农历年月日返回其汉字表示，第四个参数在农历年份是闰年的时候决定输入的是正常月份还是闰月
+     */
+    formatLunarDate(year = this._missingParameters(), month = this._missingParameters(), day = this._missingParameters(), isRun = false) {
+        let chineseDateText = this.LUNAR_INFO.CHINESE_DATE; // 存放有关 天 的字符串数组
+        let chineseMonthText = this.LUNAR_INFO.CHINESE_MONTH; // 存放有关 月 的字符串数组
+        // 年
+        let resultYear = '';
+        let yearNumArr = [...(+year + '')];
+        let yearStrArr = [];
+        yearNumArr.map(item => {
+            yearStrArr.push(chineseDateText[+item]);
+        })
+        resultYear = yearStrArr.join('');
+
+        // 月
+        let resultMonth = chineseMonthText[month - 1];
+        if (isRun) {
+            resultMonth = chineseDateText[17] + resultMonth;
+        }
+
+        // 日
+        let resultDay = '';
+        let dayNumArr = [...(+day + '')];
+        if (day <= 10) {
+            resultDay = chineseDateText[11] + chineseDateText[+day];
+        } else if (day <= 20) {
+            if (day < 20) {
+                resultDay = chineseDateText[10] + chineseDateText[+dayNumArr[1]];
+            } else if (+day === 20) {
+                resultDay = chineseDateText[2] + chineseDateText[10];
+            }
+        } else if (day <= 30) { // 农历一个月最多大月30天
+            if (day < 30) {
+                resultDay = chineseDateText[12] + chineseDateText[+dayNumArr[1]];
+            } else if (+day === 30) {
+                resultDay = chineseDateText[3] + chineseDateText[10];
+            }
+        }
+
+        return resultYear + chineseDateText[14] + resultMonth + chineseDateText[15] + resultDay + chineseDateText[16];
+    }
+
+    /**
+     * 传入中国农历年份，输出那年所有的天数
      * 如果传入的参数不规范，则返回 0
      * @param year
      */
-    getLunarYearDaysTotal(year = this._throwIfMissing()) {
+    getLunarYearDaysTotal(year = this._missingParameters()) {
         if (!year) {
             console.warn('输入的年份参数有误');
             return 0;
@@ -266,7 +310,7 @@ class LunarFunClass {
     }
 
     /**
-     * 输入农历日期，输出日期距离那年正月初一的天数
+     * 输入中国农历日期，输出日期距离那年正月初一的天数
      * 第4个参数是输入的月份是否为闰月，默认为 false
      * @param year
      * @param month
@@ -274,7 +318,7 @@ class LunarFunClass {
      * @param isRun
      * @returns {number}
      */
-    distanceLunarFirstDays(year = this._throwIfMissing(), month = this._throwIfMissing(), day = this._throwIfMissing(), isRun = false) {
+    distanceLunarFirstDays(year = this._missingParameters(), month = this._missingParameters(), day = this._missingParameters(), isRun = false) {
         let yearData = this.LUNAR_INFO.YEAR_INFO[year - this.LUNAR_INFO.MIN_YEAR];
         let yearDataInfo = this.toJSON(+year, yearData);
 
@@ -283,7 +327,7 @@ class LunarFunClass {
                 return arr + cur;
             }, 0) + day - 1;
         } else { // 如果是闰年，存在多种情况，方便理解下面写出了4种情况
-            // 如果输入的月份比闰月小，或者输入的月份值等于闰月但isRun为false，则和不是闰年一样输出
+            // 如果输入的月份比闰月小，则和不是闰年一样输出
             if (month < yearDataInfo.runMonth) {
                 return yearDataInfo.monthsDays.slice(0, month-1).reduce((arr, cur) => {
                     return arr + cur;
@@ -310,43 +354,192 @@ class LunarFunClass {
         }
     }
 
-    /**
+     /**
      * 输入两个公历日期对象，输出两个日期间隔的天数
+     * 注意，请传入两个时区相同的对象，例如传入的两个日起对象都是 UTC 时间，或都是中国时区的日起对象
      * @param date1
      * @param date2
      * @returns {number}
      */
-    distanceDate(date1 = this._throwIfMissing(), date2 = this._throwIfMissing()) {
-        // 这里注意如果是手动 new Date(y, m, d); 来声明日期对象，月份要 -1，因为js日期对象月份从0开始 0-11
+    distanceDate(date1 = this._missingParameters(), date2 = this._missingParameters()) {
         let distance = date1 - date2; // 以毫秒计的运行时长
-        return Math.floor(Math.abs(distance) / 1000 / 60 / 60 / 24); // 相差的毫秒数转为天数
+
+        // 这里会有精度问题，由原来的 Math.floor 转为 Math.round 方法，因为计算的天数有可能会出现 在中国时区为 354天，在新加坡时区为 353.99天，（中国时区和新加坡时区应该都是 +8 时区，按理说获取的时间戳是一样的，但它就是有误差我也是没办法
+        // return Math.floor(Math.abs(distance) / 1000 / 60 / 60 / 24); // 相差的毫秒数转为天数
+        return Math.round(Math.abs(distance) / 1000 / 60 / 60 / 24); // 相差的毫秒数转为天数
     }
 
     /**
-     * 输入公历年月日，返回其日期对象
+     * 输入中国公历年月日，返回其中国时间日期对象，时分秒不传默认 0
+     * 注意：此日期对象最好不要使用日期对象的获取年月日方法等直接返回年月日，因为时区不一定是,在中国
      * 因为月份在日期对象里面需要 -1(js日期对象月份从0开始 0-11)，时常忘记，所以这里写一个方法
      * @param year
      * @param month
      * @param day
      * @returns {Date}
      */
-    getDateYMD(year = this._throwIfMissing(), month = this._throwIfMissing(), day = this._throwIfMissing()) {
-        return new Date(+year, month - 1, +day);
+    getDateYMD(year = this._missingParameters(), month = this._missingParameters(), day = this._missingParameters(), h = 0, m = 0, s = 0) {
+        if (new Date().getTimezoneOffset() === -480) { // 表示当前是在中国时区
+            return new Date(+year, month - 1, +day, h, m, s);
+            
+        } else { // 表示当前不是在中国时区，那么根据输入的年月日，返回其中国时区相同的日期对象(即时间戳一样)
+            let localDate = new Date(+year, month - 1, +day, h, m, s); // 本地时间
+            let offsetGMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
+            let chinaTimestamp = localDate.getTime() - (offsetGMT * 60 * 1000) - (8 * 60 * 60 * 1000); // 中国时间戳
+
+            return new Date(chinaTimestamp);
+        }
     }
 
-    /**
-     * 传入公历年月日返回农历年月日数组
-     * 数组的第四个项是在年份为闰年的时候决定输出的月份是否是闰月
+     /**
+     * 格式化输出中国时间对象
+     * 根据中国时间对象，返回对应中国时间格式的中国时间字符串
+     * @param {object} dateObj 时间对象 如果不传则默认当前时间（如果在非中国时区，则默认中国时区的当前时间对象
+     * @param {string} formatText 时间格式 区分大小写 如果不传则默认格式为 YYYY-MM-DD hh:mm:ss
      */
+    formatDate(dateObj, formatText = 'YYYY-MM-DD hh:mm:ss') {
+        /**
+         * formatText 的字符含义
+         * | 格式       | 含义    | 备注       | 举例           |
+         * | :--:      | :--:    | :--:      | :--:          |
+         * | YYYY      | 年      | 四位数         | 1999          |
+         * | M         | 月      | 不补零     | 6             |
+         * | MM        | 月      | 补零       | 06            |
+         * | D         | 日      | 不补零     | 6             |
+         * | DD        | 日      | 补零       | 06            |
+         * | h         | 小时     | 不补零     | 7             |
+         * | hh        | 小时     | 补零      | 07            |
+         * | m         | 分钟     | 不补零     | 8             |
+         * | mm        | 分钟     | 补零      | 08            |
+         * | s         | 秒      | 不补零     | 9             |
+         * | ss        | 秒      | 补零       | 09            |
+         * | W         | 星期    | 不补零，返回 0-6 0表示星期天     | 1             |
+         * |WW         | 星期    | 补零，返回 00-06 00表示星期天      | 01            |
+         * |WT         | 星期    | 文字表述   | 星期一         |
+         * | timestamp | JS时间戳 | 13位毫秒级 | 0928624089000 |
+         */
+
+        /**
+         * @desc 十进制数字补零 注意无穷大和无穷小, 会返回一个数字字符串, 如果无法补零则会返回空字符串，默认十进制
+         * @todu 注意，如果参数值是Number且是0开头，有可能会被解析为八进制数字
+         * @returns {string} 返回十进制数字字符串
+         * @param {number or string} num
+         */
+        let addZero = function (num) {
+            if (typeof num === "undefined") {
+                console.warn("注意，addZero() 补零方法没有接收到值，将返回空字符串");
+                return '';
+            }
+
+            let number = num - 0;
+
+            if (Number.isNaN(number)) {
+                console.warn("注意，addZero() 补零方法接收的值无法转换为数字，将返回空字符串");
+                return '';
+            }
+            if (!isFinite(number)) {
+                console.warn("注意，addZero() 补零方法接收的值不是js能解析的有限数值，将返回空字符串");
+                return '';
+            }
+
+            return number < 10 ? '0' + number : '' + number;
+        };
+
+        /**
+         * 传入中国日期对象和格式化字符串，返回相应的根据 格式化字符串 替换后的 格式化后的时间字符串
+         * @todu 如果需要增加其他的格式，例如‘毫秒’，则需要修改 regObj 这个正则，并修改接下来的格式化方法(中国时区和非中国时区的格式化方法)。
+         * @param {object} dateObj 时间日期对象
+         * @param {string} formatText 格式化字符串模板
+         */
+        let formatReplace = function (dateObj, formatText = 'YYYY-MM-DD hh:mm:ss') {
+            if (!dateObj) { // 如果时间对象为空，则返回错误
+                console.error('formatReplace() 函数没有接收到 Date 时间日期对象。');
+                return false;
+            }
+            
+            // 格式化时间就是把日期对象格式化类似默认的 YYYY-MM-DD hh:mm:ss 模样
+            // 在同一个日期对象上 UTC时区格式化时间 比 中国时区格式化时间 少8小时
+            // 要想让 UTC时区格式化时间 和 中国时区格式化时间一样，只需要 日期对象本身+8小时
+            // 这样 新的日期对象UTC时区格式化时间 就和 旧的日期对象中国时区格式化时间 在字符串展示上一样
+            // 上面的可用伪代码表达为 日期对象.getHours() === new Date(日期对象.getTime() + 8小时毫秒).getUTCHours()
+            let lengthenDateObj = new Date(dateObj.getTime() + 8 * 60 * 60 * 1000);
+            let weekText = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            let regObj = /YYYY|M{1,2}|D{1,2}|h{1,2}|m{1,2}|s{1,2}|WT|W{1,2}|timestamp/g; // 注意顺序，比如 WT 要在 W 前面，否则会先匹配 W
+            
+            return formatText.replace(regObj, function (match) {
+                /**
+                 * 返回替换字符串，根据 **中国时间** 返回
+                 * match 是匹配到的字符串 如果 regObj 为 g 模式（全局替换），则每次匹配都会执行这个函数
+                 * switch 使用的是全等匹配 即 match === case的值
+                 */
+                switch (match) {
+                    case 'YYYY':
+                        return lengthenDateObj.getUTCFullYear(); // 1000-9999
+                    case 'M':
+                        return lengthenDateObj.getUTCMonth() + 1; // 月份是 0-11, 这里返回 1-12
+                    case 'MM':
+                        return addZero(lengthenDateObj.getUTCMonth() + 1); // 月份是 0-11, 这里返回 01-12
+                    case 'D':
+                        return lengthenDateObj.getUTCDate(); // 1-31
+                    case 'DD':
+                        return addZero(lengthenDateObj.getUTCDate()); // 01-31
+                    case 'h':
+                        return lengthenDateObj.getUTCHours(); // 0-23
+                    case 'hh':
+                        return addZero(lengthenDateObj.getUTCHours()); // 00-23
+                    case 'm':
+                        return lengthenDateObj.getUTCMinutes(); // 0-59
+                    case 'mm':
+                        return addZero(lengthenDateObj.getUTCMinutes()); // 00-59
+                    case 's':
+                        return lengthenDateObj.getUTCSeconds(); // 0-59
+                    case 'ss':
+                        return addZero(lengthenDateObj.getUTCSeconds()); // 00-59
+                    case 'W':
+                        return lengthenDateObj.getUTCDay(); // 日期是 0 代表星期日， 1 代表星期一，2 代表星期二， 依次类推 这里返回 0-6
+                    case 'WW':
+                        return addZero(lengthenDateObj.getUTCDay()); // 日期是 0 代表星期日， 1 代表星期一，2 代表星期二， 依次类推 这里返回 00-06
+                    case 'WT':
+                        return weekText[lengthenDateObj.getUTCDay()]; // // 日期是 0 代表星期日， 1 代表星期一，2 代表星期二， 依次类推 这里返回 星期一~星期日
+                    case 'timestamp':
+                        // 注意，这里不能用 lengthenDateObj日期对象 返回时间戳，要用 dateObj日期对象 返回时间戳，因为 lengthenDateObj 只是方便计算的时间对象，实际传入的时间对象还是 dateObj
+                        // 时间戳代表日期对象，实际传入 dateObj 的日期对象 , 则返回 dateObj 的时间戳。
+                        // 同一个日期对象在不同的时区获得的时间戳都是一样的。
+                        return dateObj.getTime(); // 从1970-1-1 00:00:00 UTC（协调世界时）到该日期经过的毫秒数，对于1970-1-1 00:00:00 UTC之前的时间返回负值。
+                    default:
+                        console.warn('没有查询到格式化字符串，请确认日期格式化字符串是否正确');
+                        return '';
+                }
+            });
+        };
+
+        if (!dateObj) { // 如果时间对象为空，则默认为当前中国时间
+            let nowDate = null;
+            if (new Date().getTimezoneOffset() === -480) { // 表示当前是在中国时区
+                nowDate = new Date();
+            } else {
+                let localDate = new Date(); // 本地时间
+                let offsetGMT = new Date().getTimezoneOffset(); // 本地时间和格林威治的时间差，单位为分钟
+                let chinaTimestamp = localDate.getTime() - (offsetGMT * 60 * 1000) - (8 * 60 * 60 * 1000); // 中国时间戳
+
+                nowDate = new Date(chinaTimestamp);
+            }
+            return formatReplace(nowDate, formatText);
+        } else {
+            return formatReplace(dateObj, formatText);
+        }
+    }
+   
     /**
-     * 
+     * 传入中国公历年月日返回农历年月日数组
+     * 数组的第四个项是在年份为闰年的时候决定输出的月份是否是闰月
      * @param { number } year 
      * @param { number } month 
      * @param { number } day 
      */
-    gregorianToLunal(year = this._throwIfMissing(), month = this._throwIfMissing(), day = this._throwIfMissing()) {
-        let yearData = this.LUNAR_INFO.YEAR_INFO[year - this.LUNAR_INFO.MIN_YEAR];
-        let yearDataInfo = this.toJSON(+year, yearData);
+    gregorianToLunal(year = this._missingParameters(), month = this._missingParameters(), day = this._missingParameters()) {
+        let yearData = this.LUNAR_INFO.YEAR_INFO[year - this.LUNAR_INFO.MIN_YEAR]; // 获取输入年份的16进制数据
+        let yearDataInfo = this.toJSON(+year, yearData); // 转化为 JSON数据
 
         /**
          * 以输入年份的农历正月初一对应的月份和天数来作为基准
@@ -398,7 +591,7 @@ class LunarFunClass {
                 reduceBreak = true;
                 monthsTotalArrIndex = index;
                 // 天数 = 月份的天数 - (农历前几个月的总和 - (公历相差天数 + 1))
-                lunalDay = monthsTotalArr[index] - ((accumulator + currentValue) - (differDays + 1))
+                lunalDay = monthsTotalArr[index] - ((accumulator + currentValue) - (differDays + 1));
             }
             return accumulator + currentValue
         }, 0);
@@ -427,13 +620,13 @@ class LunarFunClass {
     }
 
     /**
-     * 传入农历年月日返回公历年月日数组，第四个参数在农历年份是闰年的时候决定输入的是正常月份还是闰月
+     * 传入中国农历年月日返回中国公历年月日数组，第四个参数在农历年份是闰年的时候决定输入的是正常月份还是闰月
      * @param year
      * @param month
      * @param day
      * @param isRun
      */
-    lunalToGregorian(year = this._throwIfMissing(), month = this._throwIfMissing(), day = this._throwIfMissing(), isRun = false) {
+    lunalToGregorian(year = this._missingParameters(), month = this._missingParameters(), day = this._missingParameters(), isRun = false) {
         let yearData = this.LUNAR_INFO.YEAR_INFO[year - this.LUNAR_INFO.MIN_YEAR];
         let yearDataInfo = this.toJSON(+year, yearData);
 
@@ -453,7 +646,7 @@ class LunarFunClass {
                 return [+year+1, 2, day-31];
             }
         } else { // 输入的农历日期还在当前的公历年
-            let monthsTotalArr = isGregorianRun ? [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31] : [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // 公历年月份组成的数组，闰年2月29太天，平年2月28天
+            let monthsTotalArr = isGregorianRun ? [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31] : [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]; // 公历年月份组成的数组，闰年2月29天，平年2月28天
             let monthsTotalArrIndex = 0; // 公历月份处在 monthsTotalArr 的下标
             let gregorianDays = 0; // 公历当月天数
             let reduceBreak = false; // 额外参数，用来判断是否还进行计算 monthsTotalArrIndex
@@ -471,166 +664,19 @@ class LunarFunClass {
         }
     }
 
-    /**
-     * 格式化输出时间对象
-     * 根据时间对象，返回对应时间格式的时间字符串
-     * @param {object} dateObj 时间对象 如果不传则默认当前时间
-     * @param {string} formatText 时间格式 区分大小写 如果不传则默认格式为 YYYY-MM-DD hh:mm:ss
-     */
-    formatDate(dateObj, formatText = 'YYYY-MM-DD hh:mm:ss') {
-        /**
-         * formatText 的字符含义
-         * | 格式       | 含义    | 备注       | 举例           |
-         * | :--:      | :--:    | :--:      | :--:          |
-         * | YYYY      | 年      | -         | 1999          |
-         * | M         | 月      | 不补零     | 6             |
-         * | MM        | 月      | 补零       | 06            |
-         * | D         | 日      | 不补零     | 6             |
-         * | DD        | 日      | 补零       | 06            |
-         * | h         | 小时     | 不补零     | 7             |
-         * | hh        | 小时     | 补零      | 07            |
-         * | m         | 分钟     | 不补零     | 8             |
-         * | mm        | 分钟     | 补零      | 08            |
-         * | s         | 秒      | 不补零     | 9             |
-         * | ss        | 秒      | 补零       | 09            |
-         * | W         | 星期    | 不补零     | 1             |
-         * |WW         | 星期    | 补零       | 01            |
-         * |WT         | 星期    | 文字表述   | 星期一         |
-         * | timestamp | JS时间戳 | 13位毫秒级 | 0928624089000 |
-         */
 
-        /**
-         * @desc 十进制数字补零 注意无穷大和无穷小, 会返回一个数字字符串, 如果无法补零则会返回空字符串，默认十进制
-         * @todu 注意，如果参数值是Number且是0开头，有可能会被解析为八进制数字
-         * @returns {string} 返回十进制数字字符串
-         * @param {number or string} num
-         */
-        let addZero = function (num) {
-            if (typeof num === "undefined") {
-                console.warn("注意，addZero() 补零方法没有接收到值，将返回空字符串");
-                return '';
-            }
 
-            let number = num - 0;
+    
 
-            if (Number.isNaN(number)) {
-                console.warn("注意，addZero() 补零方法接收的值无法转换为数字，将返回空字符串");
-                return '';
-            }
-            if (!isFinite(number)) {
-                console.warn("注意，addZero() 补零方法接收的值不是js能解析的有限数值，将返回空字符串");
-                return '';
-            }
+}
 
-            return number < 10 ? '0' + number : '' + number;
-        };
-
-        /**
-         * 传入日期对象和格式化字符串，返回相应的根据 格式化字符串 替换后的 格式化后的时间字符串
-         * @todu 如果需要增加其他的格式，例如‘毫秒’，则需要修改 regObj 这个正则，并在 replace 第二个参数的函数里面进行相应的返回
-         * @param {object} dateObj 时间日期对象
-         * @param {string} formatText 格式化字符串模板
-         */
-        let formatReplace = function (dateObj, formatText = 'YYYY-MM-DD hh:mm:ss') {
-            if (!dateObj) { // 如果时间对象为空，则返回错误
-                console.error('formatReplace() 函数没有接收到 Date 时间日期对象。');
-                return false;
-            }
-            let regObj = /YYYY|M{1,2}|D{1,2}|h{1,2}|m{1,2}|s{1,2}|WT|W{1,2}|timestamp/g; // 注意顺序，比如 WT 要在 W 前面，否则会先匹配 W
-            let newDateText = formatText.replace(regObj, function (match) {
-                /**
-                 * 返回替换字符串，根据 **本地时间** 返回
-                 * match 是匹配到的字符串 如果 regObj 为 g 模式（全局替换），则每次匹配都会执行这个函数
-                 * switch 使用的是全等匹配 即 match === case的值
-                 */
-                let weekText = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
-                switch (match) {
-                    case 'YYYY':
-                        return dateObj.getFullYear(); // 1000-9999
-                    case 'M':
-                        return dateObj.getMonth() + 1; // 月份是 0-11, 这里返回 1-12
-                    case 'MM':
-                        return addZero(dateObj.getMonth() + 1); // 月份是 0-11, 这里返回 01-12
-                    case 'D':
-                        return dateObj.getDate(); // 1-31
-                    case 'DD':
-                        return addZero(dateObj.getDate()); // 01-31
-                    case 'h':
-                        return dateObj.getHours(); // 0-23
-                    case 'hh':
-                        return addZero(dateObj.getHours()); // 00-23
-                    case 'm':
-                        return dateObj.getMinutes(); // 0-59
-                    case 'mm':
-                        return addZero(dateObj.getMinutes()); // 00-59
-                    case 's':
-                        return dateObj.getSeconds(); // 0-59
-                    case 'ss':
-                        return addZero(dateObj.getSeconds()); // 00-59
-                    case 'W':
-                        return dateObj.getDay(); // 日期是 0 代表星期日， 1 代表星期一，2 代表星期二， 依次类推 这里返回 0-6
-                    case 'WW':
-                        return addZero(dateObj.getDay()); // 日期是 0 代表星期日， 1 代表星期一，2 代表星期二， 依次类推 这里返回 00-06
-                    case 'WT':
-                        return weekText[dateObj.getDay()]; // // 日期是 0 代表星期日， 1 代表星期一，2 代表星期二， 依次类推 这里返回 星期一~星期日
-                    case 'timestamp':
-                        return dateObj.getTime(); // 从1970-1-1 00:00:00 UTC（协调世界时）到该日期经过的毫秒数，对于1970-1-1 00:00:00 UTC之前的时间返回负值。
-                    default:
-                        console.warn('没有查询到格式化字符串，请确认日期格式化字符串是否正确');
-                        return '';
-                }
-            });
-            return newDateText;
-        };
-
-        if (!dateObj) { // 如果时间对象为空，则默认为当前时间
-            let nowDate = new Date();
-            return formatReplace(nowDate, formatText);
-        } else {
-            return formatReplace(dateObj, formatText);
-        }
-    }
-
-    /**
-     * 传入农历年月日返回其汉字表示，第四个参数在农历年份是闰年的时候决定输入的是正常月份还是闰月
-     */
-    formatLunarDate(year = this._throwIfMissing(), month = this._throwIfMissing(), day = this._throwIfMissing(), isRun = false) {
-        // 年
-        let resultYear = '';
-        let yearNumArr = [...(+year + '')];
-        let yearStrArr = [];
-        yearNumArr.map(item => {
-            yearStrArr.push(this.LUNAR_INFO.CHINESE_DATE[+item]);
-        })
-        resultYear = yearStrArr.join('');
-
-        // 月
-        let resultMonth = this.LUNAR_INFO.CHINESE_MONTH[month - 1];
-        if (isRun) {
-            resultMonth = this.LUNAR_INFO.CHINESE_DATE[17] + resultMonth;
-        }
-
-        // 日
-        let resultDay = '';
-        let dayNumArr = [...(+day + '')];
-        if (day <= 10) {
-            resultDay = this.LUNAR_INFO.CHINESE_DATE[11] + this.LUNAR_INFO.CHINESE_DATE[+day];
-        } else if (day <= 20) {
-            if (day < 20) {
-                resultDay = this.LUNAR_INFO.CHINESE_DATE[10] + this.LUNAR_INFO.CHINESE_DATE[+dayNumArr[1]];
-            } else if (+day === 20) {
-                resultDay = this.LUNAR_INFO.CHINESE_DATE[2] + this.LUNAR_INFO.CHINESE_DATE[10];
-            }
-        } else if (day <= 30) { // 农历一个月最多大月30天
-            if (day < 30) {
-                resultDay = this.LUNAR_INFO.CHINESE_DATE[12] + this.LUNAR_INFO.CHINESE_DATE[+dayNumArr[1]];
-            } else if (+day === 30) {
-                resultDay = this.LUNAR_INFO.CHINESE_DATE[3] + this.LUNAR_INFO.CHINESE_DATE[10];
-            }
-        }
-
-        return resultYear + this.LUNAR_INFO.CHINESE_DATE[14] + resultMonth + this.LUNAR_INFO.CHINESE_DATE[15] + resultDay + this.LUNAR_INFO.CHINESE_DATE[16]
-    }
-};
 LunarFunClass.prototype.LUNAR_INFO = LUNAR_INFO;
-let lunarFun = new LunarFunClass();
+
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+    typeof define === 'function' && define.amd ? define(factory) :
+    (global.lunarFun = factory()); // lunarFun 是库的名字
+}(this, (function () { 
+    'use strict';
+    return new LunarFunClass();
+})));

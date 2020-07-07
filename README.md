@@ -2,8 +2,9 @@
 原生农历(阴历, 阴阳历)和公历(阳历)互相转换的插件
 
 ## 如何使用
+
 ### 直接下载引入
-把项目文件夹下的 `lunarFun.js` 或压缩后的 `lunarFun.min.js` 下载到本地并引入。
+把项目文件夹下的 `./v2.0.0/lunarFun.js` 或压缩后的 `./v2.0.0/lunarFun.min.js` 下载到本地并引入。
 ```html
 <script src="你存放的文件夹/lunarFun.min.js"></script>
 <script>
@@ -19,64 +20,83 @@ npm i lunar-fun -save
 ```
 然后在项目入口文件引入
 ```javascript
-let lunarFun = require('lunar-fun');
+// ES6
+import lunarFun from 'lunar-fun';
+// node
+const lunarFun = require('lunar-fun');
 ```
 
+## 方法文档
 
-## 方法列表
-这里方法列表写的不是很详细，各位可以下载代码自行查看，代码里面注释很完善。
-### 主要方法
-**具体方法参数说明可查看 `lunarFun.js` 文件内各方法介绍**
+| 方法名 | `gregorianToLunal(year, month, day)`                                                       |
+| ------ | ------------------------------------------------------------------------------------------ |
+| 功能   | 传入中国公历年月日返回农历年月日数组                                                       |
+| 参数   | `year`: 四位数年； `month`: 月； `day`: 日； 注意：填入的参数都是中国公历年月日，必填。    |
+| 返回值 | 返回农历年月日组成的数字，数组的第四个项是在输出年份为闰年的时候决定输出的月份是否是闰月； |
+**例子**
+```javascript
+// 传入中国公历年月日返回农历年月日数组 
+lunarFun.gregorianToLunal(1999, 6, 6); // [1999, 4, 23, false]
+```
 
-| 方法名 | 参数 | 返回值 | 版本 |
-| :-- | :-- | :-- | :-- |
-| gregorianToLunal() | lunarFun.gregorianToLunal(2000, 2, 4) | [1999, 12, 29, false] | 1.0.0 |
-| lunalToGregorian() | lunarFun.lunalToGregorian(1906, 4, 30, true) | [1906, 6, 21] | 1.0.0 |
-| formatDate() | lunarFun.formatDate(new Date(2019,3,4,5,6,7), 'YYYY-M-D h:mm:s') | "2019-4-4 5:06:7" | 1.0.0 |
-| formatLunarDate() | lunarFun.formatLunarDate(1906, 4, 22, true) | "一九零六年闰四月廿二日" | 1.0.0 |
-| toJSON() | lunarFun.toJSON(2000, '16c960') | {"year": 2000,"isRun": false,"runMonth": 0,"runMonthDays": 0,"monthsDays": [30, 30, 29, 29, 30, 29, 29, 30, 29, 30, 30, 29],"firstMonth": 2,"firstDay": 5} | 1.0.0 |
-| isLeapYear() | lunarFun.isLeapYear(2000) | true | 1.0.0 |
-| getHeavenlyStems() | lunarFun.getHeavenlyStems(1999) | "己" | 1.0.0 |
-| getEarthlyBranches() | lunarFun.getEarthlyBranches(1999) | "卯" | 1.0.0 |
-| getZodiac() | lunarFun.getZodiac(1999) | "兔" | 1.0.0 |
-| getMonthNumberDays() | lunarFun.getMonthNumberDays(1999, 6) | 30 | 1.0.0 |
-| getLunarMonthNumberDays() | lunarFun.getLunarMonthNumberDays(1906, 4, true) | 30 | 1.0.0 |
-| getLunarYearDaysTotal() | lunarFun.getLunarYearDaysTotal(1906) | 384 | 1.0.0 |
-| distanceLunarFirstDays() | lunarFun.distanceLunarFirstDays(1906, 4, 1, true) | 118 | 1.0.0 |
-| distanceDate() | lunarFun.distanceDate(new Date(1999, 6, 6), new Date(1997, 5, 13)) | 754 | 1.0.0 |
-| getDateYMD() | lunarFun.getDateYMD(2019,3,4).toString() | "Mon Mar 04 2019 00:00:00 GMT+0800 (中国标准时间)" | 1.0.0 |
+| 方法名 | `lunalToGregorian(year, month, day, isRun)`                                                                                                |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| 功能   | 传入中国农历年月日返回中国公历年月日数组                                                                                                   |
+| 参数   | year: 四位数年； month：月； day：日； isRun：布尔值，传入的年份如果是闰年的话决定输入的农历月份是正常月份还是闰月，默认 `false` 正常月份; |
+| 返回值 | 反正中国公历年月日数组                                                                                                                     |
+**例子**
+```javascript
+// 传入中国农历年月日返回中国公历年月日数
 
-### 方法明细
-#### formatDate(dateObj, formatText) 方法明细
-* dateObj 时间对象 如果不传则默认当前时间
-* formatText 时间格式 区分大小写 如果不传则默认格式为 YYYY-MM-DD hh:mm:ss
+// 传入农历的 "正常月份"
+lunarFun.lunalToGregorian(1906, 4, 30); // [1906, 5, 23]
+// 传入农历的 "闰月"
+lunarFun.lunalToGregorian(1906, 4, 30, true); // [1906, 6, 21]
+```
 
-**formatText 的字符含义**
+**更多方法请参考对应版本文件夹下的 `lunarFun.js` 文件，里面有详细的备注，以下仅列出方法名、功能及基础例子**
 
-| 格式       | 含义    | 备注       | 举例           |
-| :--:      | :--:    | :--:      | :--:          |
-| YYYY      | 年      | -         | 1999          |
-| M         | 月      | 不补零     | 6             |
-| MM        | 月      | 补零       | 06            |
-| D         | 日      | 不补零     | 6             |
-| DD        | 日      | 补零       | 06            |
-| h         | 小时     | 不补零     | 7             |
-| hh        | 小时     | 补零      | 07            |
-| m         | 分钟     | 不补零     | 8             |
-| mm        | 分钟     | 补零      | 08            |
-| s         | 秒      | 不补零     | 9             |
-| ss        | 秒      | 补零       | 09            |
-| W         | 星期    | 不补零     | 1             |
-|WW         | 星期    | 补零       | 01            |
-|WT         | 星期    | 文字表述   | 星期一         |
-| timestamp | JS时间戳 | 13位毫秒级 | 0928624089000 |
+| 方法名                                            | 功能                                                                   | 例子                                                                                   |
+| ------------------------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `formatDate(dateObj, formatText)`                 | 格式化输出中国时间对象                                                 | `lunarFun.formatDate(new Date(), 'YYYY-MM-DD WT')` 输出: `"2020-07-07 星期二"`         |
+| `getDateYMD(year, month, day)`                    | 输入中国公历年月日，返回其中国时间日期对象，时分秒不传默认 0           | `lunarFun.getDateYMD(2019,3,4).valueOf()` 输出 `1551628800000`                         |
+| `distanceDate(date1, date2)`                      | 输入两个公历日期对象，输出两个日期间隔的天数                           | `lunarFun.distanceDate(new Date(1999, 6 - 1, 6), new Date(1997, 5-1, 13))`) 输出 `754` |
+| `distanceLunarFirstDays(year, month, day, isRun)` | 输入中国农历日期，输出日期距离那年正月初一的天数                       | `lunarFun.distanceLunarFirstDays(1906, 4, 1, true)` 输出 `118`                         |
+| `getLunarYearDaysTotal(year)`                     | 传入中国农历年份，输出那年所有的天数                                   | `lunarFun.getLunarYearDaysTotal(1999)` 输出 `354`                                      |
+| `formatLunarDate(year, month, day, isRun)`        | 传入中国农历年月日返回其汉字表示                                       | `lunarFun.formatLunarDate(1906, 4, 22, true)` 输出 `"一九零六年闰四月廿二日"`          |
+| `getLunarMonthNumberDays(year, month, isRun)`     | 传入中国农历年份和月份，输出对应月份的天数                             | `lunarFun.getLunarMonthNumberDays(1999, 6)` 输出 `29`                                  |
+| `getMonthNumberDays(year, month)`                 | 传入中国公历年份和月份，输出对应月份的天数                             | `lunarFun.getMonthNumberDays(1999, 6)` 输出 `30`                                       |
+| `getZodiac(year)`                                 | 传入中国公历年份，输出生肖，如果参数错误返回空字符串                   | `lunarFun.getZodiac(1999)` 输出 `"兔"`                                                 |
+| `getEarthlyBranches(year)`                        | 传入中国公历年份，输出地支，如果参数错误返回空字符串                   | `lunarFun.getEarthlyBranches(1999)` 输出 `"卯"`                                        |
+| `getHeavenlyStems(year)`                          | 传入中国公历年份，输出天干，如果参数错误返回空字符串                   | `lunarFun.getHeavenlyStems(1996)` 输出 `"丙"`                                          |
+| `isLeapYear(year)`                                | 判断输入的中国公历年份是否是闰年                                       | `lunarFun.isLeapYear(1996)` 输出 `true`                                                |
+| `toJSON(year, numStr)`                            | 传入中国农历年份和其对应的十六进制字符串信息，返回JS对象表示的农历数据 | 具体例子请查看下方的方法解析                                                           |
 
+## 文件说明
+
+### "/lunarData" 文件夹
+此文件夹下保存从香港天文台爬取的数据， `lunarinfo` 保存的是已经转为十六进制字符串的数据， `lunarInfoFormat` 保存的是 `JSON` 格式的详细数据。
+
+### "/lunarNpm" 文件夹
+此文件夹下保存的是上传至 `npm` 服务器的内容，每次更新记得要手动更新 `package.json` 里的版本号。
+
+### "/v1.0.0" 文件夹
+此文件夹下保存的是 `v1.0.0` 版本的代码，其中 `lunarFun.js` 为源代码， `lunarFun.min.js` 为压缩后的代码， `test.html` 为简单的测试用例，打开页面后在控制台查看。
+
+### "" 文件夹
+此文件夹下保存的是 `v2.0.0` 版本的代码，其中 `lunarFun.js` 为源代码， `lunarFun.min.js` 为压缩后的代码， `test.html` 为简单的测试用例，打开页面后在控制台查看。
 
 
 ## 更新日志
+
+### 20200619
+#### 更新
+- 更新时区对插件的影响，现支持非中国时区（注意：大部分时区都正常，小部分时区受夏令时还有真实偏移量等影响可能存在误差。
+- npm导入、浏览器导入等导入方法更新。
+
 ### 20191116
 #### 发布
-* 发布 v1.0.0 版本
+- 发布 v1.0.0 版本
 
 
 ## 农历数据说明
@@ -123,9 +143,9 @@ let lunarInfo = {
 网上大多是用二进制表示然后压缩成十六进制，这里我也沿用，但各个位置上表示的数据确有差别。具体过程如下：    
 用 24 位二进制数表示数据信息（二进制位数从右往左数）    
 
-| 24          | 23-19           | 18-17           | 16-13   | 12-9   | 8-5     | 4-1    |
-| :---------: | :-------------: | :-------------: | :-----: | :----: | :-----: | :--:   |
-| 表示闰月大小  | 正月初一对应的日子 | 正月初一对应的月份 | 正常月份 | 正常月份 | 正常月份 | 表示闰月 |
+|      24      |       23-19        |       18-17        |  16-13   |   12-9   |   8-5    |   4-1    |
+| :----------: | :----------------: | :----------------: | :------: | :------: | :------: | :------: |
+| 表示闰月大小 | 正月初一对应的日子 | 正月初一对应的月份 | 正常月份 | 正常月份 | 正常月份 | 表示闰月 |
 
 + 1-4 位
     - 表示是否有闰月，如果没有，则 1-4 都为 0, 如果有闰月则用二进制表示闰几月，不足四位左边补零到四位。
@@ -136,7 +156,7 @@ let lunarInfo = {
 + 19-23 位
     - 二进制表示农历正月初一对应的公历日子，不足五位补零到五位。注意：这里表示日子是用了5位二进制数，因为从16开始(二进制表示10000)，用二进制表示就需要用5位数了，而公历月份天数最大可以有 31 天。
 + 24 位
-    - 第二十六位表示闰月的天数。1表示大月30天，0表示小月29天。仅在是闰年的情况下生效
+    - 第二十四位表示闰月的天数。1表示大月30天，0表示小月29天。仅在是闰年的情况下生效
 
 这样就得到了一串 24 位的二进制串，然后再转为 16进制数即可。  
 注意：从16进制数转为2进制数的时候如果不足24位，则需要在左边补零到24位，再根据上面的规则转为相应的数据。
@@ -182,13 +202,13 @@ function toJSON(year, numStr) {
     // binary 第 1 个字符是当年份是闰年的时候判断闰月的天数，1是大月30天， 0是小月29天，如果不是闰年则为0
     let runInfo = binary.slice(-4);
     if (runInfo === '0000') {
-      lunarItem.isRun = false;
-      lunarItem.runMonth = 0;
-      lunarItem.runMonthDays = 0;
+        lunarItem.isRun = false;
+	    lunarItem.runMonth = 0;
+	    lunarItem.runMonthDays = 0;
     } else {
-      lunarItem.isRun = true;
-      lunarItem.runMonth = parseInt(runInfo, 2);
-      lunarItem.runMonthDays = +binary.slice(0, 1) + 29;
+        lunarItem.isRun = true;
+        lunarItem.runMonth = parseInt(runInfo, 2);
+        lunarItem.runMonthDays = +binary.slice(0, 1) + 29;
     }
 
     // binary 第 9-20 个字符是当年的正常月份天数，1是大月30天， 0是小月29天
@@ -276,3 +296,6 @@ function toHexadecimalStr(data) {
     return HexadecimalStrArr;
 }
 ```
+
+
+

@@ -1,22 +1,22 @@
 {
-  "name": "lunar-fun",
-  "version": "1.0.0",
-  "description": "原生农历(阴历, 阴阳历)和公历(阳历)互相转换的插件",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/iilu/lunarFun/tree/master"
-  },
-  "keywords": [
-    "lunar",
-    "lunarFun",
-    "lunarToGregorian",
-    "gregorianToLunar",
-    "lunarCalendar"
-  ],
-  "author": "iilu.me <79720513@qq.com>",
-  "license": "ISC"
+    "name": "lunar-fun",
+    "version": "2.0.0",
+    "description": "原生农历(阴历, 阴阳历)和公历(阳历)互相转换的插件",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/iilu/lunarFun/tree/master"
+    },
+    "keywords": [
+        "lunar",
+        "lunarFun",
+        "lunarToGregorian",
+        "gregorianToLunar",
+        "lunarCalendar"
+    ],
+    "author": "iilu.me <79720513@qq.com>",
+    "license": "ISC"
 }
