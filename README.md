@@ -85,7 +85,7 @@ lunarFun.lunalToGregorian(1906, 4, 30, true); // [1906, 6, 21]
 ### "/v1.0.0" 文件夹
 此文件夹下保存的是 `v1.0.0` 版本的代码，其中 `lunarFun.js` 为源代码， `lunarFun.min.js` 为压缩后的代码， `test.html` 为简单的测试用例，打开页面后在控制台查看。
 
-### "" 文件夹
+### "/v2.0.0" 文件夹
 此文件夹下保存的是 `v2.0.0` 版本的代码，其中 `lunarFun.js` 为源代码， `lunarFun.min.js` 为压缩后的代码， `test.html` 为简单的测试用例，打开页面后在控制台查看。
 
 
